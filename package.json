@@ -1,0 +1,17 @@
+{
+  "name": "bible-jot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:client": "npm run test --workspace=scripture-studio-client",
+    "dev:client": "npm run dev --workspace=scripture-studio-client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  }
+}
