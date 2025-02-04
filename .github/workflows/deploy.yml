@@ -27,6 +27,7 @@ jobs:
       - name: Save Docker image as .tar file
         run: |
           docker save bible-jot-client:latest -o bible-jot-client_latest.tar
+          ls ./bible-jot-client_latest.tar
 
       - name: Copy Docker image to the server
         uses: appleboy/scp-action@v0.1.7
@@ -34,7 +35,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_SSH_PASSWORD }}
-          source: "bible-jot-client_latest.tar"
+          source: "./bible-jot-client_latest.tar"
           target: "~/bible-jot-client_latest.tar"
   
       - name: SSH to server and load Docker image
