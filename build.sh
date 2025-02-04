@@ -8,7 +8,7 @@ pushd ./packages/bible-jot-client
 
 # run the build command
 # TODO: consider adding --no-cache
-docker build -t bible-jot-client .
+docker build -t bible-jot-client:latest .
 
 # return to original dir
 popd
