@@ -35,6 +35,11 @@ jobs:
           echo "$SERVER_SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
+      # Optional: Add the remote host to known_hosts to avoid SSH verification prompt
+      - name: Add remote host to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copy Docker image to the server
         run: |
           scp -i ~/.ssh/id_rsa ./bible-jot-client_latest.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp
