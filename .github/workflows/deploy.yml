@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "bible-jot-client_latest.tar"
-          target: "/tmp/bible-jot-client_latest.tar"
+          target: "/tmp/"
   
       - name: SSH to server and load Docker image
         uses: appleboy/ssh-action@v0.1.6
