@@ -63,4 +63,4 @@ jobs:
               docker load -i /tmp/bible-jot-client_latest.tar
               docker stop bible-jot-client || true
               docker rm bible-jot-client || true
-              docker run -d --name bible-jot-client -p 80:80 bible-jot-client:latest
+              docker run -d --name bible-jot-client -p 8000:80 bible-jot-client:latest
