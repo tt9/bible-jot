@@ -29,9 +29,15 @@ jobs:
           docker save bible-jot-client:latest -o bible-jot-client_latest.tar
           ls ./bible-jot-client_latest.tar
 
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SERVER_SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Copy Docker image to the server
         run: |
-          scp -i ${{ secrets.SERVER_SSH_KEY }} ./bible-jot-client_latest.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp
+          scp -i ~/.ssh/id_rsa ./bible-jot-client_latest.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp
 
       # - name: Copy Docker image to the server
       #   uses: appleboy/scp-action@v0.1.7
