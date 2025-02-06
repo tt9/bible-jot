@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test:client": "npm run test --workspace=scripture-studio-client",
-    "dev:client": "npm run dev --workspace=scripture-studio-client"
+    "test": "cd packages/bible-jot-client && npm run test -- --run && cd ../../"
   },
   "keywords": [],
   "author": "",

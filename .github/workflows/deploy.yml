@@ -1,21 +1,29 @@
 name: Deploy to dev server
 
-on: 
+on:
   push:
     branches:
       - dev
 
 jobs:
   deploy:
-  
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-      ACTIONS_STEP_DEBUG: true
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm" # Caches npm dependencies
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -43,7 +51,7 @@ jobs:
       - name: Copy Docker image to the server
         run: |
           scp -i ~/.ssh/id_rsa ./bible-jot-client_latest.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp
-  
+
       - name: SSH to server and load Docker image
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -51,7 +59,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-              docker load -i /tmp/bible-jot-client_latest.tar
-              docker stop bible-jot-client || true
-              docker rm bible-jot-client || true
-              docker run -d --name bible-jot-client -p 8000:80 bible-jot-client:latest
+            docker load -i /tmp/bible-jot-client_latest.tar
+            docker stop bible-jot-client || true
+            docker rm bible-jot-client || true
+            docker run -d --name bible-jot-client -p 8000:80 bible-jot-client:latest
