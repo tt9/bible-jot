@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cd packages/bible-jot-client && npm run test -- --run && cd ../../"
+    "test": "cd packages/bible-jot-client && npm install && npm run test -- --run && cd ../../"
   },
   "keywords": [],
   "author": "",
