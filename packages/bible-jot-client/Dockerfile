@@ -1,7 +1,3 @@
-# Build command runs relative to monorepo root
-# so relative paths are relative to the root
-# e.g. ./packages/bible-jot-client/....
-
 # Use Node.js to build the static files
 FROM node:20 AS build
 
