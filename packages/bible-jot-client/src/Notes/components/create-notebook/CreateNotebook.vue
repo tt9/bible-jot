@@ -4,7 +4,7 @@ import AppButton from '../../../components/atoms/AppButton.vue'
 import AppInput from '../../../components/atoms/AppInput.vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import { getErrorMessages } from '../../../forms/util'
+import { getErrorMessages } from '../../../forms/error'
 
 interface CreateNotebookEmit {
   (e: 'create:notebook', data: any): void
