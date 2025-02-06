@@ -1,10 +1,20 @@
 <script lang="ts" setup>
+import { watch } from 'vue'
+
 interface AppInputProps {
   label?: string
   id?: string
+  errors?: string[]
 }
 const props = withDefaults(defineProps<AppInputProps>(), {})
 const model = defineModel()
+
+watch(
+  () => props.errors,
+  () => {
+    console.log(props.errors)
+  },
+)
 </script>
 <template>
   <div class="app-input">
@@ -17,6 +27,12 @@ const model = defineModel()
       :id="props.id || ''"
       v-model="model"
     />
+    <div
+      v-if="props.errors && props.errors.length > 0"
+      class="app-input--error"
+    >
+      {{ props.errors[0] }}
+    </div>
   </div>
 </template>
 

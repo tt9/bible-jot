@@ -35,12 +35,17 @@ const props = withDefaults(defineProps<AppButtonProps>(), {
 })
 
 const className = computed(() => {
-  return `app-button app-button--${props.variant} app-button--${props.size} app-button--${props.color} app-button--${props.shape}`
+  return `app-button app-button--${props.variant} app-button--${props.size} app-button--${props.color} app-button--${props.shape} ${props.disabled ? 'app-button--disabled' : ''}`
 })
 </script>
 
 <template>
-  <button :type="props.type" :class="className" :disabled="props.disabled">
+  <button
+    :type="props.type"
+    :attrs="$attrs"
+    :class="className"
+    :disabled="props.disabled"
+  >
     <slot></slot>
   </button>
 </template>
@@ -50,6 +55,10 @@ const className = computed(() => {
   display: block;
   border: none;
   cursor: pointer;
+}
+
+.app-button--disabled {
+  cursor: not-allowed;
 }
 
 .app-button--sm {
@@ -92,6 +101,12 @@ const className = computed(() => {
   &.app-button--transparent {
     background-color: transparent;
     color: var(--color-primary);
+  }
+
+  &.app-button--disabled {
+    cursor: not-allowed;
+    background-color: var(--color-gray);
+    color: var(--color-gray-contrast);
   }
 }
 
