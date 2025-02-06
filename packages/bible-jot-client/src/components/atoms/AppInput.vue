@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { watch } from 'vue'
-
 interface AppInputProps {
   label?: string
   id?: string

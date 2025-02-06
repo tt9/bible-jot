@@ -23,7 +23,7 @@ export abstract class JsonBibleDownloader extends BibleDownloader {
         resolve(true)
       }
 
-      addRecordsTransaction.onerror = (event) => {
+      addRecordsTransaction.onerror = (_) => {
         reject(false)
       }
 
