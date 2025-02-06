@@ -16,6 +16,10 @@ const handleAddItemClicked = () => {
   createNotebookModalOpen.value = true
 }
 
+const handleCreateNotebook = (formData: any) => {
+  console.log('form data: ' + JSON.stringify(formData))
+}
+
 onMounted(async () => {
   const results = await getNotebooksFromIndexDb()
   notebooks.value = results
@@ -47,7 +51,7 @@ onMounted(async () => {
   </MenuLayout>
   <Modal v-model="createNotebookModalOpen">
     <div class="modal-content-wrap">
-      <CreateNotebook></CreateNotebook>
+      <CreateNotebook @create:notebook="handleCreateNotebook"></CreateNotebook>
     </div>
   </Modal>
 </template>
