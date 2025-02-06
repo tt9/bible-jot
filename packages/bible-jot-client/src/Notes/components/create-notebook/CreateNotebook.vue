@@ -38,7 +38,7 @@ const handleFormSubmit = async () => {
 </script>
 <template>
   <div>
-    <p class="create-notebook--title title">Create Notebook</p>
+    <p class="create-notebook--title title-lg mb-3">Create Notebook</p>
     <form @submit.prevent="handleFormSubmit">
       <div class="mb-2">
         <AppInput

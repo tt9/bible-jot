@@ -16,15 +16,6 @@ interface AppButtonProps {
   shape?: ButtonShape
 }
 
-// interface AppButtonEmits {
-//     (e: 'click'): void
-//     (e: 'submit'): void
-//     (e: 'hover'): void
-//     (e: 'focus'): void
-// }
-
-// const emits = defineEmits<AppButtonEmits>()
-
 const props = withDefaults(defineProps<AppButtonProps>(), {
   type: 'button',
   disabled: false,
@@ -35,7 +26,16 @@ const props = withDefaults(defineProps<AppButtonProps>(), {
 })
 
 const className = computed(() => {
-  return `app-button app-button--${props.variant} app-button--${props.size} app-button--${props.color} app-button--${props.shape} ${props.disabled ? 'app-button--disabled' : ''}`
+  const classNameArray = [
+    'app-button',
+    `app-button--${props.variant}`,
+    `app-button--${props.size}`,
+    `app-button--${props.color}`,
+    `app-button--${props.shape}`,
+    props.disabled ? 'app-button--disabled' : '',
+  ]
+
+  return classNameArray.join(' ')
 })
 </script>
 

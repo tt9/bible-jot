@@ -43,6 +43,7 @@ watch(
   .app-input--label {
     display: block;
     margin: 0.25rem 0;
+    font-size: var(--font-size-1);
   }
   .app-input--input {
     box-sizing: border-box;
@@ -50,6 +51,11 @@ watch(
     width: 100%;
     border: 1px solid var(--color-gray-dark);
     border-radius: 0.25rem;
+  }
+  &--error {
+    color: var(--color-error);
+    font-size: var(--font-size-1);
+    font-weight: bold;
   }
 }
 </style>
