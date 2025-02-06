@@ -8,13 +8,6 @@ interface AppInputProps {
 }
 const props = withDefaults(defineProps<AppInputProps>(), {})
 const model = defineModel()
-
-watch(
-  () => props.errors,
-  () => {
-    console.log(props.errors)
-  },
-)
 </script>
 <template>
   <div class="app-input">

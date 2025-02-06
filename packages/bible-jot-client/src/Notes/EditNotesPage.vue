@@ -5,14 +5,19 @@ import { NotesPageService } from './NotesPageService'
 import { NotesPageServiceSymbol } from './NotesPageSymbol'
 import NotesLayout from './components/NotesLayout.vue'
 import { useNotebook } from './useNotebook'
+import { useRoute } from 'vue-router'
 
-const { notebook, loadNotebook } = useNotebook()
+const { notebook, loadNotebook, saveNotebook } = useNotebook()
 const loading = ref<boolean>(true)
+const route = useRoute()
 
 watch(
   () => notebook,
-  () => {
-    console.log(`note book changed`)
+  async () => {
+    await saveNotebook()
+  },
+  {
+    deep: true,
   },
 )
 
@@ -21,7 +26,9 @@ provide(NotesPageServiceSymbol, service)
 const activePageIndex = 0
 
 onMounted(async () => {
-  await loadNotebook('12')
+  loading.value = true
+
+  await loadNotebook(route.params.id as string)
   loading.value = false
 })
 </script>

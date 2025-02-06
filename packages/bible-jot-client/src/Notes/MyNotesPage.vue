@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import { getNotebooksFromIndexDb } from './NotebookService'
+import { RouterLink, useRouter } from 'vue-router'
+import { createNotebook, getNotebooksFromIndexDb } from './NotebookService'
 import type { Notebook } from './Notebook'
 import MenuLayout from '../components/templates/MenuLayout.vue'
 import AppIcon from '../components/atoms/AppIcon.vue'
@@ -11,13 +11,19 @@ import CreateNotebook from './components/create-notebook/CreateNotebook.vue'
 const loading = ref<boolean>(true)
 const notebooks = ref<Partial<Notebook>[]>([])
 const createNotebookModalOpen = ref<boolean>(false)
+const router = useRouter()
 
 const handleAddItemClicked = () => {
   createNotebookModalOpen.value = true
 }
 
-const handleCreateNotebook = (formData: any) => {
-  console.log('form data: ' + JSON.stringify(formData))
+const handleCreateNotebook = async (formData: any) => {
+  const notebookId = await createNotebook({
+    name: formData.notebookName,
+    version: 'kjv',
+  })
+
+  router.push({ path: `/notes/${notebookId}` })
 }
 
 onMounted(async () => {

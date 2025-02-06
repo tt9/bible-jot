@@ -6,38 +6,26 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 import type { Notebook } from './Notebook'
 
-export const createTestNotebook = async (
-  name: string,
-): Promise<IDBValidKey> => {
-  const id = '123456'
-  const notebook: Notebook = {
-    id: id,
-    name: name,
-    version: 'kjv',
-    meta: {
-      displayBibleVersion: true,
-    },
+const createDefaultNotebook = (partialNotebook: Partial<Notebook>) => {
+  const notebookId = uuidv4()
+
+  const notebook = {
+    id: notebookId,
+    name: partialNotebook.name,
+    version: partialNotebook.version,
+    createdAt: new Date().toUTCString(),
     pages: [
       {
-        id: '1',
         name: 'Page 1',
-        notebookId: id,
+        notebookId: notebookId,
         verseNotes: [],
       },
     ],
-    globalNotes: [],
-    createdAt: new Date().toUTCString(),
+    meta: {
+      displayBibleVersion: true,
+    },
   }
-
-  const db = await getDb()
-
-  const store = db
-    .transaction(NotebookObjectStoreName, 'readwrite')
-    .objectStore(NotebookObjectStoreName)
-
-  const result = await promisifyDbRequest(store.add(notebook))
-
-  return result
+  return notebook
 }
 
 export const getNotebookFromIndexDb = async (notebookId: string) => {
@@ -52,7 +40,7 @@ export const getNotebookFromIndexDb = async (notebookId: string) => {
   return result
 }
 
-export const createNotebook = async (notebookName: string) => {
+export const createNotebook = async (partialNotebook: Partial<Notebook>) => {
   const db = await getDb()
 
   const store = db
@@ -60,7 +48,27 @@ export const createNotebook = async (notebookName: string) => {
     .objectStore(NotebookObjectStoreName)
 
   const result = await promisifyDbRequest(
-    store.add({ id: uuidv4(), name: notebookName }),
+    store.add(createDefaultNotebook(partialNotebook)),
+  )
+
+  return result
+}
+
+export const updateNotebook = async (
+  notebookId: string,
+  partialNotebook: Partial<Notebook>,
+) => {
+  const db = await getDb()
+
+  const store = db
+    .transaction(NotebookObjectStoreName, 'readwrite')
+    .objectStore(NotebookObjectStoreName)
+
+  const result = await promisifyDbRequest(
+    store.put({
+      ...partialNotebook,
+      id: notebookId,
+    }),
   )
 
   return result
@@ -86,7 +94,6 @@ export const getNotebooksFromIndexDb = async (): Promise<
     store.openCursor().onsuccess = (event) => {
       const cursor = (event.target as IDBRequest).result
       if (cursor) {
-        console.log(cursor.value)
         const { id, name, createdAt, updatedAt } = cursor.value
         results.push({
           id,

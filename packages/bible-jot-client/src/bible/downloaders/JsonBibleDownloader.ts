@@ -20,12 +20,10 @@ export abstract class JsonBibleDownloader extends BibleDownloader {
         'readwrite',
       )
       addRecordsTransaction.oncomplete = () => {
-        console.log('All records have been added to the database.')
         resolve(true)
       }
 
       addRecordsTransaction.onerror = (event) => {
-        console.error('Error adding records to the database:', event)
         reject(false)
       }
 

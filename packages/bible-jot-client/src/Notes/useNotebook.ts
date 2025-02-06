@@ -1,18 +1,22 @@
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import type { Notebook } from './Notebook'
-import { createTestNotebook, getNotebookFromIndexDb } from './NotebookService'
+import { getNotebookFromIndexDb, updateNotebook } from './NotebookService'
 
 const currentNotebookRef = ref<Notebook | null>(null)
 
 export function useNotebook() {
   return {
-    async loadNotebook(_: string) {
-      let notebook = await getNotebookFromIndexDb('123456')
-      if (!notebook) {
-        const key = await createTestNotebook('Test One')
-        notebook = await getNotebookFromIndexDb(key.toString())
-      }
+    async loadNotebook(notebookId: string) {
+      let notebook = await getNotebookFromIndexDb(notebookId)
       currentNotebookRef.value = notebook
+    },
+    async saveNotebook() {
+      if (!currentNotebookRef.value) return
+
+      updateNotebook(
+        currentNotebookRef.value.id,
+        toRaw(currentNotebookRef.value),
+      )
     },
     notebook: currentNotebookRef,
   }
