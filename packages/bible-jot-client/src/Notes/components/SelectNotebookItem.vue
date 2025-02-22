@@ -13,8 +13,10 @@ const props = defineProps<SelectNotebookItemProps>()
     :key="notebook.id"
     class="select-notebook--item"
   >
-    <p class="select-notebook--item--title">{{ notebook.name }}</p>
-    <p>Last Updated: {{ notebook.updatedAt || notebook.createdAt }}</p>
+    <p class="select-notebook--item--title">{{ props.notebook.name }}</p>
+    <p>
+      Last Updated: {{ props.notebook.updatedAt || props.notebook.createdAt }}
+    </p>
   </RouterLink>
 </template>
 

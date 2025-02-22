@@ -5,6 +5,7 @@ import AppInput from '../../../components/atoms/AppInput.vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { getErrorMessages } from '../../../forms/error'
+import AppSelect from '../../../components/atoms/AppSelect.vue'
 
 interface CreateNotebookEmit {
   (e: 'create:notebook', data: any): void
@@ -16,10 +17,14 @@ const isFormValid = ref<boolean>(false)
 
 const formState = reactive({
   notebookName: '',
+  version: 'kjv',
 })
 
 const formRules = {
   notebookName: {
+    required,
+  },
+  version: {
     required,
   },
 }
@@ -40,13 +45,22 @@ const handleFormSubmit = async () => {
   <div>
     <p class="create-notebook--title title-lg mb-3">Create Notebook</p>
     <form @submit.prevent="handleFormSubmit">
-      <div class="mb-2">
+      <div class="mb-3">
         <AppInput
           label="Notebook Name"
           v-model="formState.notebookName"
           :errors="getErrorMessages(vuelidate, 'notebookName')"
         ></AppInput>
       </div>
+
+      <div class="mb-3">
+        <AppSelect v-model="formState.version" label="Default Version">
+          <option value="kjv">KJV</option>
+          <option value="mkjv">MKJV</option>
+          <option value="litv">LITV</option>
+        </AppSelect>
+      </div>
+
       <AppButton
         type="submit"
         value="create"

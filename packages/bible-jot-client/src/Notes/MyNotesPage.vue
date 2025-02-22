@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { createNotebook, getNotebooksFromIndexDb } from './NotebookService'
 import type { Notebook } from './Notebook'
 import MenuLayout from '../components/templates/MenuLayout.vue'
@@ -21,7 +21,7 @@ const handleAddItemClicked = () => {
 const handleCreateNotebook = async (formData: any) => {
   const notebookId = await createNotebook({
     name: formData.notebookName,
-    version: 'kjv',
+    version: formData.version,
   })
 
   router.push({ path: `/notes/${notebookId}` })
