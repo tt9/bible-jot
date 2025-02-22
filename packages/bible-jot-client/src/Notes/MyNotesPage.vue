@@ -21,7 +21,7 @@ const handleAddItemClicked = () => {
 const handleCreateNotebook = async (formData: any) => {
   const notebookId = await createNotebook({
     name: formData.notebookName,
-    version: 'kjv',
+    version: formData.version,
   })
 
   router.push({ path: `/notes/${notebookId}` })
