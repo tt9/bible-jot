@@ -36,7 +36,7 @@ To get started with Bible Jot locally, follow these steps:
 
 4. Run the app locally:
    ```bash
-   npm start  # or yarn start
+   npm run dev  # or yarn start
    ```
 
 ## Contributing
