@@ -6,10 +6,10 @@
     "configurations": [
         {
             "type": "node-terminal",
-            "name": "Run Script: test:client",
+            "name": "Debug Test Bible Jot Client",
             "request": "launch",
-            "command": "npm run test:client",
-            "cwd": "${workspaceFolder}"
+            "command": "npm run test",
+            "cwd": "${workspaceFolder}/packages/bible-jot-client"
         }
     ]
 }

@@ -60,7 +60,7 @@ const handleToggleSelectAll = () => {
 watch(
   [() => props.bookKey, () => props.chapter],
   async () => {
-    verses.value = await BibleService.getVersesByChapter(
+    verses.value = await BibleService.getVersesInChapter(
       props.version,
       props.bookKey,
       props.chapter,

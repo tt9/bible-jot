@@ -9,7 +9,7 @@ export class BibleService {
     return BibleVersionReaderFactory.create(version).getVerses(verseAddress)
   }
 
-  async getVersesByChapter(
+  async getVersesInChapter(
     version: string,
     bookKey: string,
     chapterNumber: number,

@@ -1,5 +1,11 @@
-# Vue 3 + TypeScript + Vite
+# Bible Jot
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Open source bible note taking app.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+Great for taking notes during bible study, small groups and sermons.
+
+Ui is designed to allow inline bible note taking.
+
+---
+
+check it out live at dev.biblejot.app
