@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { ref, watch } from 'vue'
+import AppIcon from '../../components/atoms/AppIcon.vue'
+import PopoverMenu from '../../components/molecules/PopoverMenu.vue'
 import type { Notebook } from '../Notebook'
 
 interface SelectNotebookItemProps {
@@ -6,18 +9,30 @@ interface SelectNotebookItemProps {
 }
 
 const props = defineProps<SelectNotebookItemProps>()
+
+const showPopoverMenu = ref<boolean>(false)
+
+watch(showPopoverMenu, () => {
+  console.log(`showPopoverMenu: ${showPopoverMenu.value}`)
+})
 </script>
 <template>
-  <RouterLink
-    :to="'/notes/' + notebook.id"
-    :key="notebook.id"
-    class="select-notebook--item"
-  >
-    <p class="select-notebook--item--title">{{ props.notebook.name }}</p>
+  <div class="select-notebook--item">
+    <PopoverMenu v-model="showPopoverMenu"></PopoverMenu>
+    <div class="select-notebook--item--header">
+      <RouterLink :to="'/notes/' + notebook.id" :key="notebook.id">
+        <span class="select-notebook--item--title">{{
+          props.notebook.name
+        }}</span>
+      </RouterLink>
+      <div @click="showPopoverMenu = true">
+        <AppIcon name="info"> </AppIcon>
+      </div>
+    </div>
     <p>
       Last Updated: {{ props.notebook.updatedAt || props.notebook.createdAt }}
     </p>
-  </RouterLink>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -26,8 +41,14 @@ const props = defineProps<SelectNotebookItemProps>()
     box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);
     padding: 0.5rem;
     border-radius: 0.25rem;
-    text-align: center;
+    text-align: left;
 
+    &--header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
     &--title {
       font-weight: bold;
       font-size: var(--font-size-3);
