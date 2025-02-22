@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref, version, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import AppButton from '../../../components/atoms/AppButton.vue'
 import AppInput from '../../../components/atoms/AppInput.vue'
 import { useVuelidate } from '@vuelidate/core'
