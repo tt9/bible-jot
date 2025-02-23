@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import {
   AnchorStrategies,
   PopoverMenuAnchorPoint,
@@ -189,10 +189,15 @@ watch(show, async (value, oldValue) => {
   // then we want to calculate the state
   // and then animate it in
   if (!oldValue && value) {
+    // Before we start the animation, we
+    // need to allow the elements to render
+    // by setting this boolean to true
     render.value = true
 
-    // Allow the conditional elements to render
-    await nextTick()
+    // Wait for the next animation frame
+    // this will allow all elements in the menu time to
+    // fully render including icons and
+    await new Promise(requestAnimationFrame)
 
     // Sets the proper CSS to be able to calculate
     // the bounds without yet displaying the menu
@@ -234,6 +239,7 @@ watch(show, async (value, oldValue) => {
 <style lang="scss">
 .popover-menu-backdrop {
   position: fixed;
+  visibility: hidden;
   top: 0;
   left: 0;
   right: 0;
@@ -245,14 +251,11 @@ watch(show, async (value, oldValue) => {
 }
 .popover-menu {
   position: fixed;
+  visibility: hidden;
   z-index: 3;
-
-  background: white;
   top: 0;
   left: 0;
-  box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.16);
-  padding: 1rem;
-  border-radius: 0.25rem;
+
   transform-origin: top center;
 }
 </style>

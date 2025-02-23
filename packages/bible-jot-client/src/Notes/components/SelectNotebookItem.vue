@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import AppIcon from '../../components/atoms/AppIcon.vue'
-import Popover from '../../components/molecules/Popover.vue'
+import PopoverMenu from '../../components/molecules/PopoverMenu.vue'
+import PopoverMenuItem from '../../components/molecules/PopoverMenuItem.vue'
 import type { Notebook } from '../Notebook'
 
 interface SelectNotebookItemProps {
@@ -10,11 +9,7 @@ interface SelectNotebookItemProps {
 
 const props = defineProps<SelectNotebookItemProps>()
 
-const showPopoverMenu = ref<boolean>(false)
-
-watch(showPopoverMenu, () => {
-  console.log(`showPopoverMenu: ${showPopoverMenu.value}`)
-})
+const handleClick = () => {}
 </script>
 <template>
   <div class="select-notebook--item">
@@ -24,11 +19,12 @@ watch(showPopoverMenu, () => {
           props.notebook.name
         }}</span>
       </RouterLink>
-      <div class="select-notebook--item--more" @click="showPopoverMenu = true">
-        <AppIcon name="more-vertical"> </AppIcon>
-        <Popover v-model="showPopoverMenu">
-          <div>Hello World</div>
-        </Popover>
+      <div class="select-notebook--item--more">
+        <PopoverMenu>
+          <PopoverMenuItem @click="handleClick" icon-name="trash">
+            Delete
+          </PopoverMenuItem>
+        </PopoverMenu>
       </div>
     </div>
     <p>

@@ -73,6 +73,7 @@ export const AnchorStrategies: {
   [PopoverMenuAnchorPoint.TOP_RIGHT]: (menuState: MenuState) => {
     const { xLow, xHigh, yLow, yHigh } = viewportBoundaries(menuState)
 
+    debugger
     return {
       x: clamp(
         xLow,
