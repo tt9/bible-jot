@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import AppIcon from '../../components/atoms/AppIcon.vue'
-import PopoverMenu from '../../components/molecules/PopoverMenu.vue'
+import Popover from '../../components/molecules/Popover.vue'
 import type { Notebook } from '../Notebook'
 
 interface SelectNotebookItemProps {
@@ -18,15 +18,17 @@ watch(showPopoverMenu, () => {
 </script>
 <template>
   <div class="select-notebook--item">
-    <PopoverMenu v-model="showPopoverMenu"></PopoverMenu>
     <div class="select-notebook--item--header">
       <RouterLink :to="'/notes/' + notebook.id" :key="notebook.id">
         <span class="select-notebook--item--title">{{
           props.notebook.name
         }}</span>
       </RouterLink>
-      <div @click="showPopoverMenu = true">
-        <AppIcon name="info"> </AppIcon>
+      <div class="select-notebook--item--more" @click="showPopoverMenu = true">
+        <AppIcon name="more-vertical"> </AppIcon>
+        <Popover v-model="showPopoverMenu">
+          <div>Hello World</div>
+        </Popover>
       </div>
     </div>
     <p>
@@ -43,6 +45,9 @@ watch(showPopoverMenu, () => {
     border-radius: 0.25rem;
     text-align: left;
 
+    &--more {
+      cursor: pointer;
+    }
     &--header {
       display: flex;
       flex-direction: row;

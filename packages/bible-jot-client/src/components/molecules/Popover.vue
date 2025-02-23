@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import {
   AnchorStrategies,
   PopoverMenuAnchorPoint,
   type MenuState,
-} from './PopoverMenu'
+} from './Popover'
 
 import anime from 'animejs'
 
@@ -19,11 +19,19 @@ const props = withDefaults(defineProps<PopoverMenuProps>(), {
   nudgeX: 0,
   nudgeY: 0,
 })
-const model = defineModel<boolean>()
+
+/**
+ * Show is the interactable variable for controlling & triggering
+ * the animation, render is a variable that actually controls the
+ * elements rendered by vue so we can animate out before setting
+ * v-if to false in the template
+ */
+const show = defineModel<boolean>()
+const render = ref<boolean>(show.value || false)
 
 const rootElement = ref<HTMLElement | null>(null)
 const backdropElement = ref<HTMLElement | null>(null)
-const popoverMenuContentElement = ref<HTMLElement | null>(null)
+const bodyElement = computed(() => document.body)
 
 const menuState = ref<MenuState>({
   windowWidth: 0,
@@ -40,24 +48,18 @@ const menuState = ref<MenuState>({
   nudgeY: 0,
 })
 
-// const oneAnimationFrame = async () => {
-//   return new Promise((res) => requestAnimationFrame(res))
-// }
-
 const preCalculateState = async () => {
-  return new Promise((res, rej) => {
+  return new Promise((res) => {
     const rootEl = rootElement.value
     const backdropEl = backdropElement.value
-    const contentEl = popoverMenuContentElement.value
 
-    if (!rootEl || !backdropEl || !contentEl)
+    if (!rootEl || !backdropEl)
       throw new Error(
         `preCalculateState failed because one of the elements is null`,
       )
 
     backdropEl.style.opacity = '0'
     rootEl.style.opacity = '0'
-    contentEl.style.opacity = '1'
 
     backdropEl.style.display = 'block'
     backdropEl.style.visibility = 'visible'
@@ -73,7 +75,6 @@ const calculateState = () => {
   const host: HTMLElement | null =
     props.hostElement || rootElement.value?.parentElement || null
 
-  console.log(host)
   if (!host) throw new Error('Popover Menu failed to find host element')
   if (!rootElement.value)
     throw new Error('Popover Menu failed to find rootElement')
@@ -108,28 +109,21 @@ const calculateState = () => {
   }
 }
 
-const setMenuPositionToHost = () => {
-  const anchorStrategy = AnchorStrategies[props.anchorPoint]
-  const position = anchorStrategy(menuState.value)
-
-  const rootEl = rootElement.value
-  if (!rootEl) throw new Error('Unable to set menu position to host')
-
-  rootEl.style.transform = `translate(${position.x}px, ${position.y}px)`
-}
-
 const cssMenuOpacityRange = [0, 1]
-const cssBackdropOpacityRange = [0, 0.3]
-const animationDuration = 300
+const cssTransformYDistance = 16
+const cssBackdropOpacityRange = [0, 0.25]
+const animationDuration = 250
 const animationEasing = 'cubicBezier(0.4, 0, 0.2, 1)'
 
 const animateShowMenu = async () => {
   const rootEl = rootElement.value
   const backdropEl = backdropElement.value
-  const contentEl = popoverMenuContentElement.value
 
-  if (!rootEl || !backdropEl || !contentEl)
+  if (!rootEl || !backdropEl)
     throw new Error(`Failed to animateShowMenu because an element was null`)
+
+  const anchorStrategy = AnchorStrategies[props.anchorPoint]
+  const transformTargetPosition = anchorStrategy(menuState.value)
 
   const backdropAnimation = anime({
     targets: backdropEl,
@@ -143,14 +137,63 @@ const animateShowMenu = async () => {
     easing: animationEasing,
     opacity: cssMenuOpacityRange,
     duration: animationDuration,
+    translateX: [transformTargetPosition.x, transformTargetPosition.x],
+    translateY: [
+      transformTargetPosition.y + cssTransformYDistance,
+      transformTargetPosition.y,
+    ],
   })
+
+  backdropAnimation.play()
+  menuAnimation.play()
+
+  await Promise.all([backdropAnimation.finished, menuAnimation.finished])
+  // TODO: emit event?
 }
 
-watch(model, async (value, oldValue) => {
+const animateHideMenu = async () => {
+  const rootEl = rootElement.value
+  const backdropEl = backdropElement.value
+
+  if (!rootEl || !backdropEl)
+    throw new Error(`Failed to animateHideMenu because an element was null`)
+
+  const anchorStrategy = AnchorStrategies[props.anchorPoint]
+  const transformTargetPosition = anchorStrategy(menuState.value)
+
+  const backdropAnimation = anime({
+    targets: backdropEl,
+    easing: animationEasing,
+    opacity: [...cssBackdropOpacityRange].reverse(),
+    duration: animationDuration,
+  })
+
+  const menuAnimation = anime({
+    targets: rootEl,
+    easing: animationEasing,
+    opacity: [...cssMenuOpacityRange].reverse(),
+    duration: animationDuration,
+    translateX: [transformTargetPosition.x, transformTargetPosition.x],
+    translateY: [
+      transformTargetPosition.y,
+      transformTargetPosition.y + cssTransformYDistance,
+    ],
+  })
+
+  await Promise.all([backdropAnimation.finished, menuAnimation.finished])
+}
+
+watch(show, async (value, oldValue) => {
+  console.log(`show changed: ${oldValue} => ${value}`)
   // Going from not showing to showing
   // then we want to calculate the state
   // and then animate it in
   if (!oldValue && value) {
+    render.value = true
+
+    // Allow the conditional elements to render
+    await nextTick()
+
     // Sets the proper CSS to be able to calculate
     // the bounds without yet displaying the menu
     await preCalculateState()
@@ -160,10 +203,6 @@ watch(model, async (value, oldValue) => {
     // involved in showing the menu
     calculateState()
 
-    // Set the base position of the menu to the host
-    // this is based off of the calculated menu state
-    setMenuPositionToHost()
-
     // Finally, animate the menu in
     await animateShowMenu()
 
@@ -171,20 +210,29 @@ watch(model, async (value, oldValue) => {
     // to not showing
     // we simply animate out
   } else if (!value && oldValue) {
+    await animateHideMenu()
+
+    render.value = false
   }
 })
 </script>
 <template>
-  <div class="popover-menu-backdrop" ref="backdropElement"></div>
-  <div class="popover-menu" ref="rootElement">
-    <div ref="popoverMenuContentElement">
-      <slot> Hi its me a sample data </slot>
+  <Teleport :to="bodyElement">
+    <div
+      v-if="render"
+      class="popover-menu-backdrop"
+      ref="backdropElement"
+      @click="show = false"
+    ></div>
+  </Teleport>
+  <div class="popover-menu" ref="rootElement" v-if="render">
+    <div>
+      <slot></slot>
     </div>
   </div>
 </template>
 <style lang="scss">
 .popover-menu-backdrop {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -196,19 +244,15 @@ watch(model, async (value, oldValue) => {
   opacity: 0.3;
 }
 .popover-menu {
-  display: none;
   position: fixed;
   z-index: 3;
-  visibility: hidden;
 
   background: white;
   top: 0;
   left: 0;
-
-  // temp
+  box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.16);
   padding: 1rem;
-  border-radius: 0.5rem;
-
-  transform: translate(0, 0);
+  border-radius: 0.25rem;
+  transform-origin: top center;
 }
 </style>
