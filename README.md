@@ -31,12 +31,12 @@ To get started with Bible Jot locally, follow these steps:
 3. Install the necessary dependencies (if applicable):
 
    ```bash
-   npm install  # or yarn install
+   npm install
    ```
 
 4. Run the app locally:
    ```bash
-   npm run dev  # or yarn start
+   npm run dev
    ```
 
 ## Contributing
