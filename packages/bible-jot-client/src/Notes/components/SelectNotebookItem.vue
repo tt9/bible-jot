@@ -7,9 +7,19 @@ interface SelectNotebookItemProps {
   notebook: Partial<Notebook>
 }
 
-const props = defineProps<SelectNotebookItemProps>()
+interface SelectNotebookItemEmits {
+  (e: 'item:delete', id: string): void
+}
 
-const handleClick = () => {}
+const props = defineProps<SelectNotebookItemProps>()
+const emit = defineEmits<SelectNotebookItemEmits>()
+
+const handleDeleteItemClick = () => {
+  let confirmed = confirm('Are you sure you want to delete this notebook?')
+  if (!confirmed) return
+
+  emit('item:delete', props.notebook.id || '')
+}
 </script>
 <template>
   <div class="select-notebook--item">
@@ -21,7 +31,7 @@ const handleClick = () => {}
       </RouterLink>
       <div class="select-notebook--item--more">
         <PopoverMenu>
-          <PopoverMenuItem @click="handleClick" icon-name="trash">
+          <PopoverMenuItem @click="handleDeleteItemClick" icon-name="trash">
             Delete
           </PopoverMenuItem>
         </PopoverMenu>
