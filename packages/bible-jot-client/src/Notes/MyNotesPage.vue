@@ -27,7 +27,7 @@ const handleCreateNotebook = async (formData: any) => {
   router.push({ path: `/notes/${notebookId}` })
 }
 
-const handleDeleteNotebook = async (id: string) => {}
+const handleDeleteNotebook = async (_: string) => {}
 
 onMounted(async () => {
   const results = await getNotebooksFromIndexDb()
