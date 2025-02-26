@@ -19,5 +19,6 @@ const props = defineProps<PopoverMenuItemProps>()
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  cursor: pointer;
 }
 </style>

@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import IconButton from '../../components/atoms/IconButton.vue'
 import NotesList from './NotesList.vue'
+import PageNotesSidebar from './PageNotesSidebar.vue'
 import type { Notebook } from '../Notebook'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'vue-router'
 import { useNotebook } from '../useNotebook'
+import { ref } from 'vue'
 
 interface NotebookPageDisplayProps {
   notebook: Notebook
@@ -14,6 +16,7 @@ const props = defineProps<NotebookPageDisplayProps>()
 const router = useRouter()
 
 const { selectVersesWithPicker } = useNotebook()
+const sidebarOpen = ref<boolean>(false)
 
 const exitToNotesList = () => {
   router.replace({ path: '/notes' })
@@ -47,7 +50,12 @@ const handleSelectVersesClicked = async () => {
       >
         <small>Add Verses</small>
       </IconButton>
-      <IconButton color="secondary" size="sm" name="edit">
+      <IconButton
+        color="secondary"
+        size="sm"
+        name="edit"
+        @click="sidebarOpen = true"
+      >
         <small>Page Notes</small>
       </IconButton>
       <div aria-hidden="true" class="flex-spacer"></div>
@@ -61,7 +69,6 @@ const handleSelectVersesClicked = async () => {
         <small>Exit</small>
       </IconButton>
     </div>
-
     <p
       class="centered-text p-1"
       v-if="!props.notebook.pages[props.activePageIndex]?.verseNotes?.length"
@@ -73,6 +80,7 @@ const handleSelectVersesClicked = async () => {
       :notebook="props.notebook"
       :activePageIndex="props.activePageIndex"
     ></NotesList>
+    <PageNotesSidebar v-model="sidebarOpen"></PageNotesSidebar>
   </div>
 </template>
 
