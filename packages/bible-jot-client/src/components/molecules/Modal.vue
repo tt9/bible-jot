@@ -102,12 +102,14 @@ const onBackdropClick = () => {
       window.history.back()
     }
     open.value = false
+    emit('modal:close')
   }
 }
 
 const onBackButton = (e: PopStateEvent) => {
   e.preventDefault()
   open.value = false
+  emit('modal:close')
 }
 watch(
   open,

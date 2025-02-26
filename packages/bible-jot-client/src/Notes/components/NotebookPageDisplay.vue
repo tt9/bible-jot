@@ -1,22 +1,27 @@
 <script lang="ts" setup>
 import IconButton from '../../components/atoms/IconButton.vue'
-import Modal from '../../components/molecules/Modal.vue'
-import VerseSelector from './verse-selector/VerseSelector.vue'
 import NotesList from './NotesList.vue'
 import type { Notebook } from '../Notebook'
-import { ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'vue-router'
+import { useNotebook } from '../useNotebook'
 
 interface NotebookPageDisplayProps {
   notebook: Notebook
   activePageIndex: number
 }
 const props = defineProps<NotebookPageDisplayProps>()
-const verseSelectionModalOpen = ref<boolean>(false)
 const router = useRouter()
 
-const handleVersesSelected = (verseAddresses: string[]) => {
+const { selectVersesWithPicker } = useNotebook()
+
+const exitToNotesList = () => {
+  router.replace({ path: '/notes' })
+}
+
+const handleSelectVersesClicked = async () => {
+  const verseAddresses = await selectVersesWithPicker()
+
   const activePage = props.notebook.pages[props.activePageIndex]
   const verseNotes = verseAddresses.map((verseAddress, index) => {
     return {
@@ -28,19 +33,6 @@ const handleVersesSelected = (verseAddresses: string[]) => {
   })
 
   activePage.verseNotes.push(...verseNotes)
-  closeModalAndPopWindowState()
-}
-
-const popWindowState = () => {
-  window.history.back()
-}
-const closeModalAndPopWindowState = () => {
-  verseSelectionModalOpen.value = false
-  popWindowState()
-}
-
-const exitToNotesList = () => {
-  router.replace({ path: '/notes' })
 }
 </script>
 
@@ -48,7 +40,7 @@ const exitToNotesList = () => {
   <div class="notebook-page" v-if="notebook">
     <div class="notebook-page--actions">
       <IconButton
-        @click="verseSelectionModalOpen = true"
+        @click="handleSelectVersesClicked"
         color="secondary"
         size="sm"
         name="book-open"
@@ -81,17 +73,6 @@ const exitToNotesList = () => {
       :notebook="props.notebook"
       :activePageIndex="props.activePageIndex"
     ></NotesList>
-
-    <Modal v-model="verseSelectionModalOpen" width="600px">
-      <div class="modal-content-wrap">
-        <VerseSelector
-          :reset-state="verseSelectionModalOpen"
-          :version="props.notebook.version || ''"
-          @select:verses="handleVersesSelected"
-          @click:back="closeModalAndPopWindowState()"
-        ></VerseSelector>
-      </div>
-    </Modal>
   </div>
 </template>
 

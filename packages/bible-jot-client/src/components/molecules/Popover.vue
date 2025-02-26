@@ -184,7 +184,6 @@ const animateHideMenu = async () => {
 }
 
 watch(show, async (value, oldValue) => {
-  console.log(`show changed: ${oldValue} => ${value}`)
   // Going from not showing to showing
   // then we want to calculate the state
   // and then animate it in
@@ -194,10 +193,12 @@ watch(show, async (value, oldValue) => {
     // by setting this boolean to true
     render.value = true
 
-    // Wait for the next animation frame
+    // Wait for a few animation frames
     // this will allow all elements in the menu time to
     // fully render including icons and
-    await new Promise(requestAnimationFrame)
+    for (let i = 0; i < 2; i++) {
+      await new Promise(requestAnimationFrame)
+    }
 
     // Sets the proper CSS to be able to calculate
     // the bounds without yet displaying the menu

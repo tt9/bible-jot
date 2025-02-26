@@ -2,6 +2,7 @@
 import PopoverMenu from '../../../components/molecules/PopoverMenu.vue'
 import PopoverMenuItem from '../../../components/molecules/PopoverMenuItem.vue'
 import type { VerseNote } from '../../Notebook'
+import { useNotebook } from '../../useNotebook'
 
 interface NoteEditorProps {
   note: VerseNote
@@ -12,7 +13,7 @@ interface NoteEditorEmits {
 
 const props = defineProps<NoteEditorProps>()
 const emit = defineEmits<NoteEditorEmits>()
-
+const { selectVersesWithPicker } = useNotebook()
 const editorValue = defineModel<string | null>()
 
 const selectableColors = [
@@ -32,8 +33,19 @@ const handleNoteColorClicked = (_: any, color: string) => {
   }
 }
 
-const handleDeleteItemClicked = () => {
+const handleDeleteItemClicked = (close: Function) => {
   emit('delete', props.note.id)
+  close()
+}
+
+const handleAddVersesBeforeClicked = async (close: Function) => {
+  close()
+  await selectVersesWithPicker()
+}
+
+const handleAddVersesAfterClicked = async (close: Function) => {
+  close()
+  await selectVersesWithPicker()
 }
 </script>
 <template>
@@ -48,8 +60,23 @@ const handleDeleteItemClicked = () => {
           @click="handleNoteColorClicked($event, color)"
         ></div>
       </div>
-      <PopoverMenu>
-        <PopoverMenuItem @click="handleDeleteItemClicked" icon-name="trash">
+      <PopoverMenu v-slot="{ closePopover }">
+        <PopoverMenuItem
+          @click="handleAddVersesBeforeClicked(closePopover)"
+          icon-name="book"
+        >
+          Add Verse Before
+        </PopoverMenuItem>
+        <PopoverMenuItem
+          @click="handleAddVersesAfterClicked(closePopover)"
+          icon-name="book"
+        >
+          Add Verse After
+        </PopoverMenuItem>
+        <PopoverMenuItem
+          @click="handleDeleteItemClicked(closePopover)"
+          icon-name="trash"
+        >
           Delete
         </PopoverMenuItem>
       </PopoverMenu>
