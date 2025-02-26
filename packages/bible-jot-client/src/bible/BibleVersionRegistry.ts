@@ -22,3 +22,9 @@ export const BibleVersionRegistry = [
     local: true,
   },
 ]
+
+export const BibleVersionRegistryMap = BibleVersionRegistry.reduce((map, entry) => {
+  map[entry.version] = entry;
+  return map;
+}, {} as Record<string, typeof BibleVersionRegistry[number]>);
+
