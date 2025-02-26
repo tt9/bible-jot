@@ -40,7 +40,7 @@ export const getNotebookFromIndexDb = async (notebookId: string) => {
   return result
 }
 
-export const createNotebook = async (partialNotebook: Partial<Notebook>) => {
+export const createNotebookInIndexDb = async (partialNotebook: Partial<Notebook>) => {
   const db = await getDb()
 
   const store = db
@@ -54,7 +54,7 @@ export const createNotebook = async (partialNotebook: Partial<Notebook>) => {
   return result
 }
 
-export const updateNotebook = async (
+export const updateNotebookInIndexDb = async (
   notebookId: string,
   partialNotebook: Partial<Notebook>,
 ) => {

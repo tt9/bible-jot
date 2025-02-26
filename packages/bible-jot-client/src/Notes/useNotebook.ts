@@ -1,6 +1,6 @@
 import { ref, toRaw } from 'vue'
 import type { Notebook } from './Notebook'
-import { getNotebookFromIndexDb, updateNotebook } from './NotebookService'
+import { getNotebookFromIndexDb, updateNotebookInIndexDb } from './NotebookService'
 
 const currentNotebookRef = ref<Notebook | null>(null)
 
@@ -13,7 +13,7 @@ export function useNotebook() {
     async saveNotebook() {
       if (!currentNotebookRef.value) return
 
-      updateNotebook(
+      updateNotebookInIndexDb(
         currentNotebookRef.value.id,
         toRaw(currentNotebookRef.value),
       )

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { createNotebook, getNotebooksFromIndexDb } from './NotebookService'
+import { getNotebooksFromIndexDb, createNotebookInIndexDb } from './NotebookService'
 import type { Notebook } from './Notebook'
 import MenuLayout from '../components/templates/MenuLayout.vue'
 import AppIcon from '../components/atoms/AppIcon.vue'
@@ -19,7 +19,7 @@ const handleAddItemClicked = () => {
 }
 
 const handleCreateNotebook = async (formData: any) => {
-  const notebookId = await createNotebook({
+  const notebookId = await createNotebookInIndexDb({
     name: formData.notebookName,
     version: formData.version,
   })
