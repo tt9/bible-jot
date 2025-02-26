@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import PopoverMenu from '../../../components/molecules/PopoverMenu.vue'
+import PopoverMenuItem from '../../../components/molecules/PopoverMenuItem.vue'
 import type { VerseNote } from '../../Notebook'
 
 interface NoteEditorProps {
   note: VerseNote
 }
+interface NoteEditorEmits {
+  (e: 'delete', id: string): void
+}
 
 const props = defineProps<NoteEditorProps>()
+const emit = defineEmits<NoteEditorEmits>()
 
 const editorValue = defineModel<string | null>()
 
@@ -25,6 +31,10 @@ const handleNoteColorClicked = (_: any, color: string) => {
     props.note.color = undefined
   }
 }
+
+const handleDeleteItemClicked = () => {
+  emit('delete', props.note.id)
+}
 </script>
 <template>
   <div class="note-editor">
@@ -38,6 +48,11 @@ const handleNoteColorClicked = (_: any, color: string) => {
           @click="handleNoteColorClicked($event, color)"
         ></div>
       </div>
+      <PopoverMenu>
+        <PopoverMenuItem @click="handleDeleteItemClicked" icon-name="trash">
+          Delete
+        </PopoverMenuItem>
+      </PopoverMenu>
     </div>
     <textarea
       class="note-editor--editor"
@@ -61,7 +76,8 @@ const handleNoteColorClicked = (_: any, color: string) => {
   &--toolbar {
     display: flex;
     flex-direction: row;
-    height: 32px;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 

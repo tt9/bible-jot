@@ -15,12 +15,16 @@ interface NoteBookNodeProps {
 const defaultVersion = 'ukjv'
 const props = withDefaults(defineProps<NoteBookNodeProps>(), {})
 
-// const notesPageService = inject(NotesPageServiceSymbol)
-
 const editorOpen = ref<boolean>(false)
 
 const toggleEditorOpen = () => {
   editorOpen.value = !editorOpen.value
+}
+
+const handleDeleteVerseNote = () => {
+  const id = props.note.id
+  const index = props.notebookPage.verseNotes.findIndex((i) => i.id === id)
+  props.notebookPage.verseNotes.splice(index, 1)
 }
 </script>
 
@@ -50,6 +54,7 @@ const toggleEditorOpen = () => {
       v-if="editorOpen"
       v-model="props.note.notes"
       :note="props.note"
+      @delete="handleDeleteVerseNote"
     ></NoteEditor>
   </div>
 </template>
