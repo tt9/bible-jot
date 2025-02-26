@@ -61,6 +61,9 @@ const orderedItems = computed(() => {
     background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
+    & button {
+      padding: 0;
+    }
   }
 }
 </style>

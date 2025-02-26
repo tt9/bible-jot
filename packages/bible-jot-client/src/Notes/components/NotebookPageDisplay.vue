@@ -98,7 +98,7 @@ const exitToNotesList = () => {
 <style lang="scss" scoped>
 .notebook-page {
   position: relative;
-  .notebook-page--actions {
+  &--actions {
     display: flex;
     gap: 0.5rem;
     min-height: 48px;

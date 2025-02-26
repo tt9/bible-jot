@@ -6,9 +6,6 @@ import NoTextSelection from '../../components/atoms/NoTextSelection.vue'
 import NoteEditor from './edit/NoteEditor.vue'
 import { ref } from 'vue'
 
-// import { inject, ref } from 'vue'
-// import { NotesPageServiceSymbol } from '../NotesPageSymbol'
-
 interface NoteBookNodeProps {
   notebook: Notebook
   notebookPage: NotebookPage

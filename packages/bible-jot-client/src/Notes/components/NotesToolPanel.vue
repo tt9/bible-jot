@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import IconButton from '../../components/atoms/IconButton.vue'
+import GlobalNotes from './GlobalNotes.vue'
 
 const open = defineModel<boolean>()
 </script>
@@ -14,7 +15,9 @@ const open = defineModel<boolean>()
           @click="open = false"
         ></IconButton>
       </div>
-      <div class="notes-tool-panel--content">Content</div>
+      <div class="notes-tool-panel--content">
+        <GlobalNotes></GlobalNotes>
+      </div>
     </div>
   </Transition>
 </template>
