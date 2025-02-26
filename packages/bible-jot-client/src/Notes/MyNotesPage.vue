@@ -27,6 +27,8 @@ const handleCreateNotebook = async (formData: any) => {
   router.push({ path: `/notes/${notebookId}` })
 }
 
+const handleDeleteNotebook = async (_: string) => {}
+
 onMounted(async () => {
   const results = await getNotebooksFromIndexDb()
   notebooks.value = results
@@ -36,7 +38,7 @@ onMounted(async () => {
 <template>
   <MenuLayout>
     <div class="container">
-      <h4 class="p-2 mt-0 mb-2">My Notes</h4>
+      <h4 class="p-2 mt-0 mb-2">My Notebooks</h4>
       <div v-if="loading">Loading...</div>
       <div v-else>
         <div class="notebook-grid">
@@ -46,6 +48,7 @@ onMounted(async () => {
           <SelectNotebookItem
             v-for="notebook in notebooks"
             :notebook="notebook"
+            @item:delete="handleDeleteNotebook"
           ></SelectNotebookItem>
         </div>
       </div>

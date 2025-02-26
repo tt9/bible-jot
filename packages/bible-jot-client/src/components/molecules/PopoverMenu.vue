@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import IconButton from '../atoms/IconButton.vue'
 import Popover from './Popover.vue'
 
 const showPopover = ref<boolean>(false)
+
+onUnmounted(() => {
+  showPopover.value = false
+})
 </script>
 <template>
   <div>

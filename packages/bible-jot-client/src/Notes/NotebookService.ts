@@ -114,3 +114,7 @@ export const getNotebooksFromIndexDb = async (): Promise<
     }
   })
 }
+
+export const deleteNotebookFromIndexDb = async (_: string) => {
+  // const db = await getDb()
+}
