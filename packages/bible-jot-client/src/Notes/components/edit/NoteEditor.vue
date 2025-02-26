@@ -1,12 +1,19 @@
 <script setup lang="ts">
+import PopoverMenu from '../../../components/molecules/PopoverMenu.vue'
+import PopoverMenuItem from '../../../components/molecules/PopoverMenuItem.vue'
 import type { VerseNote } from '../../Notebook'
+import { useNotebook } from '../../useNotebook'
 
 interface NoteEditorProps {
   note: VerseNote
 }
+interface NoteEditorEmits {
+  (e: 'delete', id: string): void
+}
 
 const props = defineProps<NoteEditorProps>()
-
+const emit = defineEmits<NoteEditorEmits>()
+const { selectVersesWithPicker } = useNotebook()
 const editorValue = defineModel<string | null>()
 
 const selectableColors = [
@@ -25,6 +32,21 @@ const handleNoteColorClicked = (_: any, color: string) => {
     props.note.color = undefined
   }
 }
+
+const handleDeleteItemClicked = (close: Function) => {
+  emit('delete', props.note.id)
+  close()
+}
+
+const handleAddVersesBeforeClicked = async (close: Function) => {
+  close()
+  await selectVersesWithPicker()
+}
+
+const handleAddVersesAfterClicked = async (close: Function) => {
+  close()
+  await selectVersesWithPicker()
+}
 </script>
 <template>
   <div class="note-editor">
@@ -38,6 +60,26 @@ const handleNoteColorClicked = (_: any, color: string) => {
           @click="handleNoteColorClicked($event, color)"
         ></div>
       </div>
+      <PopoverMenu v-slot="{ closePopover }">
+        <PopoverMenuItem
+          @click="handleAddVersesBeforeClicked(closePopover)"
+          icon-name="book"
+        >
+          Add Verse Before
+        </PopoverMenuItem>
+        <PopoverMenuItem
+          @click="handleAddVersesAfterClicked(closePopover)"
+          icon-name="book"
+        >
+          Add Verse After
+        </PopoverMenuItem>
+        <PopoverMenuItem
+          @click="handleDeleteItemClicked(closePopover)"
+          icon-name="trash"
+        >
+          Delete
+        </PopoverMenuItem>
+      </PopoverMenu>
     </div>
     <textarea
       class="note-editor--editor"
@@ -61,7 +103,8 @@ const handleNoteColorClicked = (_: any, color: string) => {
   &--toolbar {
     display: flex;
     flex-direction: row;
-    height: 32px;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 

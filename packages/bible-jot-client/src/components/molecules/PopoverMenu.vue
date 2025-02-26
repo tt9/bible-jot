@@ -18,7 +18,7 @@ onUnmounted(() => {
     ></IconButton>
     <Popover v-model="showPopover">
       <div class="popover-menu-content" role="menu">
-        <slot></slot>
+        <slot :closePopover="() => (showPopover = false)"></slot>
       </div>
     </Popover>
   </div>

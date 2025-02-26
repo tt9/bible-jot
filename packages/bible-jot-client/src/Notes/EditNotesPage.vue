@@ -4,6 +4,7 @@ import { onMounted, ref, watch } from 'vue'
 import NotesLayout from './components/NotesLayout.vue'
 import { useNotebook } from './useNotebook'
 import { useRoute } from 'vue-router'
+import VerseSelectorModal from './components/verse-selector/VerseSelectorModal.vue'
 
 const { notebook, loadNotebook, saveNotebook } = useNotebook()
 const loading = ref<boolean>(true)
@@ -37,6 +38,13 @@ onMounted(async () => {
           :activePageIndex="activePageIndex"
         ></NoteBookPageDisplay>
       </div>
+      <!-- 
+        Only create on instance of this 
+        Additional instances will overwrite the single
+        registration refs of this modal and make
+        it not usable from the useNotebook composable function
+       -->
+      <VerseSelectorModal></VerseSelectorModal>
     </NotesLayout>
   </template>
 </template>

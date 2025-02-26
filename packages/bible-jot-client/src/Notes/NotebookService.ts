@@ -40,7 +40,9 @@ export const getNotebookFromIndexDb = async (notebookId: string) => {
   return result
 }
 
-export const createNotebookInIndexDb = async (partialNotebook: Partial<Notebook>) => {
+export const createNotebookInIndexDb = async (
+  partialNotebook: Partial<Notebook>,
+) => {
   const db = await getDb()
 
   const store = db
@@ -115,6 +117,12 @@ export const getNotebooksFromIndexDb = async (): Promise<
   })
 }
 
-export const deleteNotebookFromIndexDb = async (_: string) => {
-  // const db = await getDb()
+export const deleteNotebookFromIndexDb = async (id: string) => {
+  const db = await getDb()
+
+  const store = db
+    .transaction(NotebookObjectStoreName, 'readwrite')
+    .objectStore(NotebookObjectStoreName)
+
+  await promisifyDbRequest(store.delete(id))
 }
