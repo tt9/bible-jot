@@ -35,14 +35,12 @@ const open = defineModel<boolean>()
   transition: transform 275ms cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-
   &__content {
     flex: 1 1 auto;
     display: flex;
     display: flex;
     flex-direction: column;
   }
-
   &__toolbar {
     height: 48px;
     display: flex;
