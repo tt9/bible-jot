@@ -19,6 +19,7 @@ const createDefaultNotebook = (partialNotebook: Partial<Notebook>) => {
         name: '_',
         notebookId: notebookId,
         verseNotes: [],
+        pageNotes: { id: uuidv4(), notes: '', notebookId: notebookId },
       },
     ],
     meta: {
