@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cd packages/bible-jot-client && npm install && npm run test -- --run && cd ../../",
+    "install:all": "npm run install:client",
+    "install:client": "cd packages/bible-jot-client && npm install && cd ../../",
+    "test": "npm run test:client",
+    "test:client": "cd packages/bible-jot-client && npm run test -- --run && cd ../../",
     "build": "npm run build:client",
     "build:client": "cd packages/bible-jot-client && npm run build && cd ../../"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "devDependencies": {
     "prettier": "^3.5.2"

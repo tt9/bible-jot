@@ -35,7 +35,7 @@ export function useNotebook() {
     // null checks or assertions
     activeNotebook: computed(() => {
       if (!currentNotebookRef.value)
-        throw new Error('Trying to access active notebook before loading it')
+        throw new Error('Trying to access activeNotebook before loading it')
 
       return currentNotebookRef.value
     }),
