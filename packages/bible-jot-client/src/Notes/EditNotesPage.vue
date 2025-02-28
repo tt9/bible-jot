@@ -9,7 +9,6 @@ import VerseSelectorModal from './components/verse-selector/VerseSelectorModal.v
 const { notebook, loadNotebook, saveNotebook } = useNotebook()
 const loading = ref<boolean>(true)
 const route = useRoute()
-const activePageIndex = 0
 
 watch(
   () => notebook,
@@ -29,24 +28,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="loading">Loading...</div>
-  <template v-else>
-    <NotesLayout :notebook="notebook!">
-      <div class="container">
-        <NoteBookPageDisplay
-          :notebook="notebook!"
-          :activePageIndex="activePageIndex"
-        ></NoteBookPageDisplay>
-      </div>
-      <!-- 
-        Only create on instance of this 
+  <NotesLayout>
+    <div v-if="loading" class="container">Loading Notebook...</div>
+    <div class="container" v-else>
+      <NoteBookPageDisplay></NoteBookPageDisplay>
+    </div>
+    <!-- 
+        Only create one instance of this 
         Additional instances will overwrite the single
         registration refs of this modal and make
         it not usable from the useNotebook composable function
        -->
-      <VerseSelectorModal></VerseSelectorModal>
-    </NotesLayout>
-  </template>
+    <VerseSelectorModal></VerseSelectorModal>
+  </NotesLayout>
 </template>
 
 <style lang="scss" scoped></style>

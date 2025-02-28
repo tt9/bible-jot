@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getNotebooksFromIndexDb, createNotebookInIndexDb, deleteNotebookFromIndexDb } from './NotebookService'
+import {
+  getNotebooksFromIndexDb,
+  createNotebookInIndexDb,
+  deleteNotebookFromIndexDb,
+} from './NotebookService'
 import type { Notebook } from './Notebook'
 import MenuLayout from '../components/templates/MenuLayout.vue'
 import AppIcon from '../components/atoms/AppIcon.vue'
@@ -24,7 +28,7 @@ const handleCreateNotebook = async (formData: any) => {
     version: formData.version,
   })
 
-  router.push({ path: `/notes/${notebookId}` })
+  router.push(`/notes/${notebookId}`)
 }
 
 const handleDeleteNotebook = async (id: string) => {

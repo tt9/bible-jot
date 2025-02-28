@@ -1,20 +1,18 @@
 <script lang="ts" setup>
 import AsyncVerseText from './AsyncVerseText.vue'
 import NotesText from './NotesText.vue'
-import type { Notebook, NotebookPage, VerseNote } from '../Notebook'
+import type { VerseNote } from '../Notebook'
 import NoTextSelection from '../../components/atoms/NoTextSelection.vue'
 import NoteEditor from './edit/NoteEditor.vue'
 import { ref } from 'vue'
+import { useNotebook } from '../useNotebook'
 
+const defaultVersion = 'kjv'
 interface NoteBookNodeProps {
-  notebook: Notebook
-  notebookPage: NotebookPage
   note: VerseNote
 }
-
-const defaultVersion = 'ukjv'
 const props = withDefaults(defineProps<NoteBookNodeProps>(), {})
-
+const { activePage, activeNotebook } = useNotebook()
 const editorOpen = ref<boolean>(false)
 
 const toggleEditorOpen = () => {
@@ -23,8 +21,8 @@ const toggleEditorOpen = () => {
 
 const handleDeleteVerseNote = () => {
   const id = props.note.id
-  const index = props.notebookPage.verseNotes.findIndex((i) => i.id === id)
-  props.notebookPage.verseNotes.splice(index, 1)
+  const index = activePage.value.verseNotes.findIndex((i) => i.id === id)
+  activePage.value.verseNotes.splice(index, 1)
 }
 </script>
 
@@ -36,9 +34,9 @@ const handleDeleteVerseNote = () => {
   >
     <NoTextSelection @click="toggleEditorOpen()">
       <AsyncVerseText
-        :showVersion="props.notebook.meta?.displayBibleVersion"
+        :showVersion="activeNotebook.meta?.displayBibleVersion"
         :version="
-          props.note.version || props.notebook.version || defaultVersion
+          props.note.version || activeNotebook.version || defaultVersion
         "
         :verseAddress="props.note.verseAddress"
       >

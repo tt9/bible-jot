@@ -2,20 +2,13 @@
 import IconButton from '../../components/atoms/IconButton.vue'
 import NotesList from './NotesList.vue'
 import PageNotesSidebar from './PageNotesSidebar.vue'
-import type { Notebook } from '../Notebook'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'vue-router'
 import { useNotebook } from '../useNotebook'
 import { ref } from 'vue'
 
-interface NotebookPageDisplayProps {
-  notebook: Notebook
-  activePageIndex: number
-}
-const props = defineProps<NotebookPageDisplayProps>()
 const router = useRouter()
-
-const { selectVersesWithPicker } = useNotebook()
+const { selectVersesWithPicker, activeNotebook, activePage } = useNotebook()
 const sidebarOpen = ref<boolean>(false)
 
 const exitToNotesList = () => {
@@ -25,22 +18,21 @@ const exitToNotesList = () => {
 const handleSelectVersesClicked = async () => {
   const verseAddresses = await selectVersesWithPicker()
 
-  const activePage = props.notebook.pages[props.activePageIndex]
   const verseNotes = verseAddresses.map((verseAddress, index) => {
     return {
       id: uuidv4(),
-      order: activePage.verseNotes.length + index,
+      order: activePage.value.verseNotes.length + index,
       verseAddress: verseAddress,
-      notebookId: props.notebook.id,
+      notebookId: activeNotebook.value.id,
     }
   })
 
-  activePage.verseNotes.push(...verseNotes)
+  activePage.value.verseNotes.push(...verseNotes)
 }
 </script>
 
 <template>
-  <div class="notebook-page" v-if="notebook">
+  <div class="notebook-page">
     <div class="notebook-page--actions">
       <IconButton
         @click="handleSelectVersesClicked"
@@ -69,17 +61,11 @@ const handleSelectVersesClicked = async () => {
         <small>Exit</small>
       </IconButton>
     </div>
-    <p
-      class="centered-text p-1"
-      v-if="!props.notebook.pages[props.activePageIndex]?.verseNotes?.length"
-    >
+    <p class="centered-text p-1" v-if="!activePage.verseNotes?.length">
       <em> Click on the "Add Verses" button to start taking notes. </em>
     </p>
 
-    <NotesList
-      :notebook="props.notebook"
-      :activePageIndex="props.activePageIndex"
-    ></NotesList>
+    <NotesList></NotesList>
     <PageNotesSidebar v-model="sidebarOpen"></PageNotesSidebar>
   </div>
 </template>
