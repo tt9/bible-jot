@@ -1,37 +1,28 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import OrderableList from '../../components/molecules/OrderableList.vue'
-import type { Notebook, VerseNote } from '../Notebook'
+import type { VerseNote } from '../Notebook'
 import NotesItem from './NotesItem.vue'
+import { useNotebook } from '../useNotebook'
 
-interface DraggableNotesListProps {
-  notebook: Notebook
-  activePageIndex: number
-}
-
-const props = defineProps<DraggableNotesListProps>()
-const notebookPage = computed(() => {
-  return props.notebook.pages[props.activePageIndex]
-})
+const { activePage } = useNotebook()
 
 const sortNotesByOrder = () => {
-  notebookPage.value.verseNotes.sort((a, b) => a.order - b.order)
+  activePage.value.verseNotes.sort((a, b) => a.order - b.order)
 }
 const normalizeOrder = () => {
-  notebookPage.value.verseNotes.forEach((note, index) => {
+  activePage.value.verseNotes.forEach((note, index) => {
     note.order = index
   })
 }
 
 const swapNote = (fromIndex: number, toIndex: number) => {
-  const temp = notebookPage.value.verseNotes[fromIndex]
-  notebookPage.value.verseNotes[fromIndex] =
-    notebookPage.value.verseNotes[toIndex]
-  notebookPage.value.verseNotes[toIndex] = temp
+  const temp = activePage.value.verseNotes[fromIndex]
+  activePage.value.verseNotes[fromIndex] = activePage.value.verseNotes[toIndex]
+  activePage.value.verseNotes[toIndex] = temp
 }
 const handleOrderItemUp = (item: VerseNote, _: VerseNote[]) => {
   sortNotesByOrder()
-  const index = notebookPage.value.verseNotes.findIndex((i) => i.id === item.id)
+  const index = activePage.value.verseNotes.findIndex((i) => i.id === item.id)
   if (index === 0) {
     return
   }
@@ -41,8 +32,8 @@ const handleOrderItemUp = (item: VerseNote, _: VerseNote[]) => {
 
 const handleOrderItemDown = (item: VerseNote, _: VerseNote[]) => {
   sortNotesByOrder()
-  const index = notebookPage.value.verseNotes.findIndex((i) => i.id === item.id)
-  if (index >= notebookPage.value.verseNotes.length - 1) {
+  const index = activePage.value.verseNotes.findIndex((i) => i.id === item.id)
+  if (index >= activePage.value.verseNotes.length - 1) {
     return
   }
   swapNote(index, index + 1)
@@ -51,17 +42,13 @@ const handleOrderItemDown = (item: VerseNote, _: VerseNote[]) => {
 </script>
 <template>
   <OrderableList
-    :items="notebookPage.verseNotes"
+    :items="activePage.verseNotes"
     :compare="(a, b) => a.order - b.order"
     @order:up="handleOrderItemUp"
     @order:down="handleOrderItemDown"
   >
     <template #item="{ item }">
-      <NotesItem
-        :notebook="props.notebook"
-        :notebookPage="notebookPage"
-        :note="item"
-      ></NotesItem>
+      <NotesItem :note="item"></NotesItem>
     </template>
   </OrderableList>
   <div class="notes-list--spacer"></div>

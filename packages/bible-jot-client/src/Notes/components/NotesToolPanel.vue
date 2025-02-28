@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import IconButton from '../../components/atoms/IconButton.vue'
-import GlobalNotes from './PageNotes.vue'
 
 const open = defineModel<boolean>()
 </script>

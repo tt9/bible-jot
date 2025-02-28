@@ -1,20 +1,20 @@
-import { ref, toRaw, type Ref } from 'vue'
+import { computed, ref, toRaw, type Ref } from 'vue'
 import type { Notebook } from './Notebook'
 import {
   getNotebookFromIndexDb,
   updateNotebookInIndexDb,
 } from './NotebookService'
 
-/**
- * TODO: Currently all of the notebook editing components
- * take in the notebook as a prop. But we also have the
- * currently-being-worked-on notebook as a global ref here
- * For testing purposes I like props, but it could be better
- * to have this be the single source of truth for the notebook
- * And just have a reusable mocking system for tests
- *
- */
 const currentNotebookRef = ref<Notebook | null>(null)
+
+/**
+ * TODO: the structure of the notebook is
+ * set up to support multiple pages in a notebook
+ * but that functionality has not been implemented yet
+ * so this will always be notebook page index 0 for now
+ */
+const activePageIndexRef = ref<number>(0)
+
 let showVerseSelectionModalRef: Ref<boolean>
 
 // These variables allow us to track the modal independently
@@ -27,7 +27,26 @@ let cancelVerseSelection: () => void
 
 export function useNotebook() {
   return {
+    // Nullable reference
     notebook: currentNotebookRef,
+
+    // Guaranteed non-null reference for loading
+    // into subchildren without needing a bunch of
+    // null checks or assertions
+    activeNotebook: computed(() => {
+      if (!currentNotebookRef.value)
+        throw new Error('Trying to access active notebook before loading it')
+
+      return currentNotebookRef.value
+    }),
+    activePageIndex: activePageIndexRef,
+    activePage: computed(() => {
+      if (!currentNotebookRef.value)
+        throw new Error(
+          'Trying to access active page when currentNotebook is not loaded',
+        )
+      return currentNotebookRef.value.pages[activePageIndexRef.value]
+    }),
     async loadNotebook(notebookId: string) {
       let notebook = await getNotebookFromIndexDb(notebookId)
       currentNotebookRef.value = notebook
