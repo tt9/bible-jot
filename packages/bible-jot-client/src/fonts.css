@@ -1,9 +1,9 @@
 @font-face {
-    font-family: 'Open Sans';
-    src: url(/fonts/open_sans/OpenSans-VariableFont_wdth,wght.ttf) format('woff2');
+  font-family: 'Open Sans';
+  src: url(/fonts/open_sans/OpenSans-VariableFont_wdth,wght.ttf) format('woff2');
 }
 
 @font-face {
-    font-family: 'Crimson Text';
-    src: url(/fonts/crimson_text/CrimsonText-Regular.ttf) format('woff2');
+  font-family: 'Crimson Text';
+  src: url(/fonts/crimson_text/CrimsonText-Regular.ttf) format('woff2');
 }
