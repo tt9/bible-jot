@@ -8,13 +8,14 @@ import {
 
 import anime from 'animejs'
 
-interface PopoverMenuProps {
+interface PopoverProps {
   hostElement?: HTMLElement
   anchorPoint?: PopoverMenuAnchorPoint
   nudgeX?: number
   nudgeY?: number
+  maxWidth?: number
 }
-const props = withDefaults(defineProps<PopoverMenuProps>(), {
+const props = withDefaults(defineProps<PopoverProps>(), {
   anchorPoint: PopoverMenuAnchorPoint.TOP_RIGHT,
   nudgeX: 0,
   nudgeY: 0,
@@ -230,12 +231,13 @@ watch(show, async (value, oldValue) => {
       ref="backdropElement"
       @click="show = false"
     ></div>
-  </Teleport>
-  <div class="popover-menu" ref="rootElement" v-if="render">
-    <div>
-      <slot></slot>
+
+    <div class="popover-menu" ref="rootElement" v-if="render">
+      <div>
+        <slot></slot>
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 <style lang="scss">
 .popover-menu-backdrop {
@@ -249,6 +251,7 @@ watch(show, async (value, oldValue) => {
   height: 100%;
   background: black;
   opacity: 0.3;
+  z-index: 2;
 }
 .popover-menu {
   position: fixed;

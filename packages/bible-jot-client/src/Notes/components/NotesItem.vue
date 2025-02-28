@@ -64,6 +64,7 @@ const handleDeleteVerseNote = () => {
   border-bottom: 1px solid #ccc;
   padding: 0.5rem;
   height: 100%;
+  cursor: pointer;
 
   &.editor-open {
     border-bottom: none;
