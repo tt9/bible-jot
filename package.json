@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "install:all": "npm run install:client",
+    "install:client": "npm --prefix packages/bible-jot-client install",
     "test": "npm run test:client",
-    "test:client": "cd packages/bible-jot-client && npm run test -- --run && cd ../../",
+    "test:client": "npm --prefix packages/bible-jot-client run test -- --run",
     "build": "npm run build:client",
-    "build:client": "cd packages/bible-jot-client && npm run build && cd ../../"
+    "build:client": "npm --prefix packages/bible-jot-client run build"
   },
   "keywords": [],
   "author": "",

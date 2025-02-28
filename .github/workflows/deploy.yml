@@ -20,7 +20,7 @@ jobs:
           cache: "npm" # Caches npm dependencies
 
       - name: Install dependencies
-        run: npm install
+        run: npm run install:all
 
       - name: Run tests
         run: npm test
