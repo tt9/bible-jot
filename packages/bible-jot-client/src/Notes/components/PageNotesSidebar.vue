@@ -33,7 +33,6 @@ const open = defineModel<boolean>()
   box-shadow: -2px 0 4px 2px rgba(0, 0, 0, 0.16);
   z-index: 2;
   transition: transform 275ms cubic-bezier(0.4, 0, 0.2, 1);
-
   display: flex;
   flex-direction: column;
 
