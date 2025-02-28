@@ -4,11 +4,11 @@
   "main": "index.js",
   "scripts": {
     "install:all": "npm run install:client",
-    "install:client": "npm --prefix packages/bible-jot-client install",
+    "install:client": "cd packages/bible-jot-client && npm install && cd ../../",
     "test": "npm run test:client",
-    "test:client": "npm --prefix packages/bible-jot-client run test -- --run",
+    "test:client": "cd packages/bible-jot-client && npm run test -- --run && cd ../../",
     "build": "npm run build:client",
-    "build:client": "npm --prefix packages/bible-jot-client run build"
+    "build:client": "cd packages/bible-jot-client && npm run build && cd ../../"
   },
   "keywords": [],
   "author": "",
