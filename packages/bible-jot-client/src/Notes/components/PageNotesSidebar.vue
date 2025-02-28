@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import IconButton from '../../components/atoms/IconButton.vue'
-import GlobalNotes from './GlobalNotes.vue'
+import PageNotes from './PageNotes.vue'
 
 const open = defineModel<boolean>()
 </script>
@@ -16,7 +16,7 @@ const open = defineModel<boolean>()
         ></IconButton>
       </div>
       <div class="page-notes-sidebar--content">
-        <GlobalNotes></GlobalNotes>
+        <PageNotes></PageNotes>
       </div>
     </div>
   </Transition>
