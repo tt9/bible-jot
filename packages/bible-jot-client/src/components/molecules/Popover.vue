@@ -32,6 +32,7 @@ const render = ref<boolean>(show.value || false)
 
 const rootElement = ref<HTMLElement | null>(null)
 const backdropElement = ref<HTMLElement | null>(null)
+const templateAnchorElement = ref<HTMLElement | null>(null)
 const bodyElement = computed(() => document.body)
 
 const menuState = ref<MenuState>({
@@ -74,7 +75,7 @@ const preCalculateState = async () => {
 
 const calculateState = () => {
   const host: HTMLElement | null =
-    props.hostElement || rootElement.value?.parentElement || null
+    props.hostElement || templateAnchorElement.value?.parentElement || null
 
   if (!host) throw new Error('Popover Menu failed to find host element')
   if (!rootElement.value)
@@ -224,6 +225,7 @@ watch(show, async (value, oldValue) => {
 })
 </script>
 <template>
+  <div ref="templateAnchorElement"></div>
   <Teleport :to="bodyElement">
     <div
       v-if="render"
