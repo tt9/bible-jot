@@ -21,8 +21,9 @@ const toggleEditorOpen = () => {
 
 const handleDeleteVerseNote = () => {
   const id = props.note.id
-  const index = activePage.value.verseNotes.findIndex((i) => i.id === id)
-  activePage.value.verseNotes.splice(index, 1)
+  activePage.value.verseNotes = [
+    ...activePage.value.verseNotes.filter((n) => n.id !== id),
+  ]
 }
 </script>
 

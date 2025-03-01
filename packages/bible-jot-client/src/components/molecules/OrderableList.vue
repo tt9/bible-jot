@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import IconButton from '../atoms/IconButton.vue'
 
@@ -31,7 +31,7 @@ const orderedItems = computed(() => {
 <template>
   <div class="orderable-list">
     <div class="orderable-list-item" v-for="item in orderedItems">
-      <div class="orderable-list-item-content">
+      <div class="orderable-list-item-content" :key="item.id">
         <slot name="item" v-bind:item="item"></slot>
       </div>
       <div class="orderable-list-controls" v-if="showControls">
