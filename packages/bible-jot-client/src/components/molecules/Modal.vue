@@ -130,8 +130,6 @@ onMounted(() => {
   if (!modalElementRef.value) {
     throw new Error('Modal element not found')
   }
-  // modalElementRef.value?.parentElement?.removeChild(modalElementRef.value)
-  // hostElement.value?.appendChild(modalElementRef.value)
   if (props.width && modalPopupRef.value) {
     modalPopupRef.value.style.width = props.width
   }

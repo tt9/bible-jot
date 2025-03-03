@@ -7,7 +7,7 @@ const open = defineModel<boolean>()
 <template>
   <Transition>
     <div class="page-notes-sidebar" :class="{ open }" v-if="open">
-      <div class="page-notes-sidebar--toolbar">
+      <div class="page-notes-sidebar__toolbar">
         <span></span>
         <IconButton
           name="x-circle"
@@ -15,7 +15,7 @@ const open = defineModel<boolean>()
           @click="open = false"
         ></IconButton>
       </div>
-      <div class="page-notes-sidebar--content">
+      <div class="page-notes-sidebar__content">
         <PageNotes></PageNotes>
       </div>
     </div>
@@ -33,7 +33,15 @@ const open = defineModel<boolean>()
   box-shadow: -2px 0 4px 2px rgba(0, 0, 0, 0.16);
   z-index: 2;
   transition: transform 275ms cubic-bezier(0.4, 0, 0.2, 1);
-  &--toolbar {
+  display: flex;
+  flex-direction: column;
+  &__content {
+    flex: 1 1 auto;
+    display: flex;
+    display: flex;
+    flex-direction: column;
+  }
+  &__toolbar {
     height: 48px;
     display: flex;
     flex-direction: row;

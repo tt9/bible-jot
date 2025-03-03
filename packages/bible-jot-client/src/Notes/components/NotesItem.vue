@@ -21,8 +21,9 @@ const toggleEditorOpen = () => {
 
 const handleDeleteVerseNote = () => {
   const id = props.note.id
-  const index = activePage.value.verseNotes.findIndex((i) => i.id === id)
-  activePage.value.verseNotes.splice(index, 1)
+  activePage.value.verseNotes = [
+    ...activePage.value.verseNotes.filter((n) => n.id !== id),
+  ]
 }
 </script>
 
@@ -64,6 +65,7 @@ const handleDeleteVerseNote = () => {
   border-bottom: 1px solid #ccc;
   padding: 0.5rem;
   height: 100%;
+  cursor: pointer;
 
   &.editor-open {
     border-bottom: none;

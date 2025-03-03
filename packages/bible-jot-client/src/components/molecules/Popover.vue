@@ -8,13 +8,14 @@ import {
 
 import anime from 'animejs'
 
-interface PopoverMenuProps {
+interface PopoverProps {
   hostElement?: HTMLElement
   anchorPoint?: PopoverMenuAnchorPoint
   nudgeX?: number
   nudgeY?: number
+  maxWidth?: number
 }
-const props = withDefaults(defineProps<PopoverMenuProps>(), {
+const props = withDefaults(defineProps<PopoverProps>(), {
   anchorPoint: PopoverMenuAnchorPoint.TOP_RIGHT,
   nudgeX: 0,
   nudgeY: 0,
@@ -31,6 +32,7 @@ const render = ref<boolean>(show.value || false)
 
 const rootElement = ref<HTMLElement | null>(null)
 const backdropElement = ref<HTMLElement | null>(null)
+const templateAnchorElement = ref<HTMLElement | null>(null)
 const bodyElement = computed(() => document.body)
 
 const menuState = ref<MenuState>({
@@ -73,7 +75,7 @@ const preCalculateState = async () => {
 
 const calculateState = () => {
   const host: HTMLElement | null =
-    props.hostElement || rootElement.value?.parentElement || null
+    props.hostElement || templateAnchorElement.value?.parentElement || null
 
   if (!host) throw new Error('Popover Menu failed to find host element')
   if (!rootElement.value)
@@ -223,6 +225,7 @@ watch(show, async (value, oldValue) => {
 })
 </script>
 <template>
+  <div ref="templateAnchorElement"></div>
   <Teleport :to="bodyElement">
     <div
       v-if="render"
@@ -230,12 +233,13 @@ watch(show, async (value, oldValue) => {
       ref="backdropElement"
       @click="show = false"
     ></div>
-  </Teleport>
-  <div class="popover-menu" ref="rootElement" v-if="render">
-    <div>
-      <slot></slot>
+
+    <div class="popover-menu" ref="rootElement" v-if="render">
+      <div>
+        <slot></slot>
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 <style lang="scss">
 .popover-menu-backdrop {
@@ -249,6 +253,7 @@ watch(show, async (value, oldValue) => {
   height: 100%;
   background: black;
   opacity: 0.3;
+  z-index: 2;
 }
 .popover-menu {
   position: fixed;

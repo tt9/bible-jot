@@ -18,7 +18,7 @@ export interface NotebookPage {
   id: string
   name: string
   verseNotes: VerseNote[]
-  pageNotes?: GlobalNote[]
+  pageNotes: GlobalNote
   notebookId: string
 }
 

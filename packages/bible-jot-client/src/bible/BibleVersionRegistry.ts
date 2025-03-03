@@ -1,6 +1,6 @@
-import { KjvBibleVersionReader } from './readers/KjvBibleVersionReader'
-import { MkjvBibleVersionReader } from './readers/MkjvBibleVersionReader'
-import { LitvBibleVersionReader } from './readers/LitvBibleVersionReader'
+import { KjvBibleVersionReader } from './readers/indexdb/KjvBibleVersionReader'
+import { MkjvBibleVersionReader } from './readers/indexdb/MkjvBibleVersionReader'
+import { LitvBibleVersionReader } from './readers/indexdb/LitvBibleVersionReader'
 
 export const BibleVersionRegistry = [
   {
@@ -23,8 +23,10 @@ export const BibleVersionRegistry = [
   },
 ]
 
-export const BibleVersionRegistryMap = BibleVersionRegistry.reduce((map, entry) => {
-  map[entry.version] = entry;
-  return map;
-}, {} as Record<string, typeof BibleVersionRegistry[number]>);
-
+export const BibleVersionRegistryMap = BibleVersionRegistry.reduce(
+  (map, entry) => {
+    map[entry.version] = entry
+    return map
+  },
+  {} as Record<string, (typeof BibleVersionRegistry)[number]>,
+)

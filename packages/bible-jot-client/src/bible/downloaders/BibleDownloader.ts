@@ -11,6 +11,13 @@ export abstract class BibleDownloader {
 
   protected abstract fetchBibleData(): Promise<string>
 
+  /**
+   * Checks the indexdb object store if a record for
+   * this bible version already exists.
+   * Unfortunately this doesn't check for data corruption
+   * and if the records is in the db but not correct
+   * we won't know.
+   */
   protected async isBibleVersionDownloaded(version: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       const db = await getDb()

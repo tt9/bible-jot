@@ -1,7 +1,7 @@
 import type { BibleVersionReader } from './BibleVersionReader'
-import { KjvBibleVersionReader } from './KjvBibleVersionReader'
-import { LitvBibleVersionReader } from './LitvBibleVersionReader'
-import { MkjvBibleVersionReader } from './MkjvBibleVersionReader'
+import { KjvBibleVersionReader } from './indexdb/KjvBibleVersionReader'
+import { LitvBibleVersionReader } from './indexdb/LitvBibleVersionReader'
+import { MkjvBibleVersionReader } from './indexdb/MkjvBibleVersionReader'
 
 export class BibleVersionReaderFactory {
   static create(version: string): BibleVersionReader {
