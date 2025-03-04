@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm" # Caches npm dependencies
+          cache: 'npm' # Caches npm dependencies
 
       - name: Install dependencies
         run: npm run install:all
@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          ./build.sh
+          docker build -t bible-jot-client:latest .
 
       - name: Save Docker image as .tar file
         run: |

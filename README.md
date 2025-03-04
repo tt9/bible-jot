@@ -25,7 +25,7 @@ To get started with Bible Jot locally, follow these steps:
 2. Navigate into the project folder:
 
    ```bash
-   cd bible-jot/packages/bible-jot-client
+   cd bible-jot
    ```
 
 3. Install the necessary dependencies (if applicable):
