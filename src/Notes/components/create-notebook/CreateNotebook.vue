@@ -6,6 +6,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { getErrorMessages } from '../../../forms/error'
 import AppSelect from '../../../components/atoms/AppSelect.vue'
+import { BibleVersionRegistry } from '../../../bible/BibleVersionRegistry'
 
 interface CreateNotebookEmit {
   (e: 'create:notebook', data: any): void
@@ -55,9 +56,12 @@ const handleFormSubmit = async () => {
 
       <div class="mb-3">
         <AppSelect v-model="formState.version" label="Default Version">
-          <option value="kjv">KJV</option>
-          <option value="mkjv">MKJV</option>
-          <option value="litv">LITV</option>
+          <option
+            v-for="bibleVersion in BibleVersionRegistry"
+            :value="bibleVersion.version"
+          >
+            {{ bibleVersion.name }}
+          </option>
         </AppSelect>
       </div>
 

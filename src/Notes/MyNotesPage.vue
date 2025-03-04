@@ -51,7 +51,7 @@ onMounted(async () => {
       <div v-if="loading">Loading...</div>
       <div v-else>
         <div class="notebook-grid">
-          <button class="notebook-grid--add-item" @click="handleAddItemClicked">
+          <button class="notebook-grid__add-item" @click="handleAddItemClicked">
             <span>New Notebook</span><AppIcon name="plus-circle" />
           </button>
           <SelectNotebookItem
@@ -77,7 +77,7 @@ onMounted(async () => {
   gap: 0.5rem;
   padding: 0.5rem;
 
-  &--add-item {
+  &__add-item {
     border: 3px dashed var(--color-gray);
     border-radius: 0.25rem;
     text-align: center;

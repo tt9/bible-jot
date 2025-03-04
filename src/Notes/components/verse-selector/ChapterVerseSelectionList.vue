@@ -21,6 +21,7 @@ interface ChapterVerseSelectionListEmits {
 
 const props = defineProps<ChapterVerseSelectionListProps>()
 const emit = defineEmits<ChapterVerseSelectionListEmits>()
+const loadingVerses = ref<boolean>(false)
 const verses = ref<BibleVerse[]>([])
 const selectedVerses = ref<Set<number>>(new Set())
 
@@ -60,11 +61,13 @@ const handleToggleSelectAll = () => {
 watch(
   [() => props.bookKey, () => props.chapter],
   async () => {
+    loadingVerses.value = true
     verses.value = await BibleService.getVersesInChapter(
       props.version,
       props.bookKey,
       props.chapter,
     )
+    loadingVerses.value = false
   },
   {
     immediate: true,
@@ -84,7 +87,10 @@ watch(
       ></IconButton>
     </div>
     <div class="chapter-verse-display--verse-selection-list">
-      <NoTextSelection>
+      <div v-if="loadingVerses">
+        <span>Loading verses...</span>
+      </div>
+      <NoTextSelection v-else>
         <div
           class="chapter-verse-display--verse-selection-list-item"
           v-for="verse in verses"
