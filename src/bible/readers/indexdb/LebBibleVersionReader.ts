@@ -1,5 +1,4 @@
 import { LebBibleDownloader } from '../../downloaders/LebBibleDownloader'
-import { LitvBibleDownloader } from '../../downloaders/LitvBibleDownloader'
 import { type BibleVersionReader } from '../BibleVersionReader'
 import { IndexDbJsonBibleVersionReader } from './IndexDbJsonBibleVersionReader'
 
