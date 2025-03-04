@@ -43,7 +43,7 @@ jobs:
           echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      # Optional: Add the remote host to known_hosts to avoid SSH verification prompt
+      # Add the remote host to known_hosts to avoid SSH verification prompt
       - name: Add remote host to known hosts
         run: |
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
