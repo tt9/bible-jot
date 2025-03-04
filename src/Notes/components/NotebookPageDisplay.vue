@@ -68,7 +68,7 @@ const handleSelectVersesClicked = async () => {
 
     <NotesList></NotesList>
 
-    <BottomSheet v-model="sidebarOpen">
+    <BottomSheet v-model="sidebarOpen" :can-swipe="false">
       <PageNotes></PageNotes>
     </BottomSheet>
   </div>

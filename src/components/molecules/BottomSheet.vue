@@ -317,6 +317,7 @@ defineExpose({ open, close })
           <div
             class="bottom-sheet__draggable-area"
             ref="bottomSheetDraggableArea"
+            v-if="props.canSwipe"
           >
             <div class="bottom-sheet__draggable-thumb"></div>
           </div>
