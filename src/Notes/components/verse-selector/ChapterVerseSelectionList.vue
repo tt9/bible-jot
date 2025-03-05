@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-
 import VerseText from '../VerseText.vue'
 import { verseToAddress, type BibleVerse } from '../../../bible/Bible'
 import BibleService from '../../../bible/BibleService'

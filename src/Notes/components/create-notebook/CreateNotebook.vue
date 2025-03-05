@@ -64,14 +64,12 @@ const handleFormSubmit = async () => {
           </option>
         </AppSelect>
       </div>
-
       <AppButton
         type="submit"
         value="create"
         class="btn btn-primary"
         :disabled="!isFormValid"
-      >
-        Create</AppButton
+        >Create</AppButton
       >
     </form>
   </div>
