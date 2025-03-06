@@ -15,11 +15,12 @@ const emit = defineEmits<NotesLayoutEmits>()
 
 <template>
   <div class="notes-toolbar">
-    <div class="container notes-container">
-      <p class="notes-toolbar--title">{{ props.title }}</p>
+    <div class="notes-toolbar__container">
+      <p class="notes-toolbar__title" :title="props.title">{{ props.title }}</p>
       <IconButton
         name="menu"
         size="sm"
+        class="notes-toolbar__menu-button"
         @click="emit('menu:click')"
       ></IconButton>
     </div>
@@ -34,18 +35,26 @@ const emit = defineEmits<NotesLayoutEmits>()
   box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);
   background-color: white;
 
-  &--title {
-    font-size: var(--font-size-3);
+  &__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+    padding: 0.5rem;
+  }
+
+  &__title {
+    font-size: var(--font-size-2);
     margin: 0;
     font-weight: bold;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
-}
-.notes-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 48px;
-  padding: 0.5rem;
+
+  &__menu-button {
+    margin-left: auto;
+  }
 }
 </style>

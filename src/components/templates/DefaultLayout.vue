@@ -3,6 +3,10 @@ import BottomMenu from '../molecules/BottomMenu.vue'
 </script>
 
 <template>
-  <slot name="default"></slot>
-  <BottomMenu></BottomMenu>
+  <div class="app-surface">
+    <slot name="default"></slot>
+    <BottomMenu></BottomMenu>
+  </div>
 </template>
+
+<style lang="scss" scoped></style>

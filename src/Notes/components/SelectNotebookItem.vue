@@ -14,10 +14,11 @@ interface SelectNotebookItemEmits {
 const props = defineProps<SelectNotebookItemProps>()
 const emit = defineEmits<SelectNotebookItemEmits>()
 
-const handleDeleteItemClick = () => {
+const handleDeleteItemClick = (closePopover: Function) => {
   let confirmed = confirm('Are you sure you want to delete this notebook?')
   if (!confirmed) return
 
+  closePopover()
   emit('item:delete', props.notebook.id || '')
 }
 </script>
@@ -34,9 +35,9 @@ const handleDeleteItemClick = () => {
         }}</span>
       </RouterLink>
       <div class="select-notebook-item__more">
-        <PopoverMenu>
+        <PopoverMenu v-slot="{ closePopover }">
           <PopoverMenuItem
-            @click="handleDeleteItemClick"
+            @click="handleDeleteItemClick(closePopover)"
             icon-name="trash"
             class="select-notebook-item__more-item"
           >
@@ -57,6 +58,7 @@ const handleDeleteItemClick = () => {
   padding: 0.5rem;
   border-radius: 0.25rem;
   text-align: left;
+  background: white;
 
   &__header {
     display: flex;

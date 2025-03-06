@@ -46,8 +46,8 @@ onMounted(async () => {
 </script>
 <template>
   <DefaultLayout>
-    <div class="container">
-      <h4 class="p-2 mt-0 mb-2">My Notebooks</h4>
+    <div class="container p-2">
+      <h4 class="p-2 mt-0 mb-2 pt-8">My Notebooks</h4>
       <div v-if="loading">Loading...</div>
       <div v-else>
         <div class="notebook-grid">

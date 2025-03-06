@@ -48,6 +48,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   border-top: 1px solid var(--color-gray);
+  background: white;
   .container {
     display: flex;
     justify-content: space-between;
