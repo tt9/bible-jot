@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import IconButton from '../atoms/IconButton.vue'
-import { onMounted, onUpdated } from 'vue'
+import { onMounted } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
