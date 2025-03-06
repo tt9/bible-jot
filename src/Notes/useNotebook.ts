@@ -26,6 +26,14 @@ let onVersesSelected: (verses: string[]) => void
 let cancelVerseSelection: () => void
 
 export function useNotebook() {
+  let activePage = computed(() => {
+    if (!currentNotebookRef.value)
+      throw new Error(
+        'Trying to access active page when currentNotebook is not loaded',
+      )
+    return currentNotebookRef.value.pages[activePageIndexRef.value]
+  })
+
   return {
     // Nullable reference
     notebook: currentNotebookRef,
@@ -40,13 +48,7 @@ export function useNotebook() {
       return currentNotebookRef.value
     }),
     activePageIndex: activePageIndexRef,
-    activePage: computed(() => {
-      if (!currentNotebookRef.value)
-        throw new Error(
-          'Trying to access active page when currentNotebook is not loaded',
-        )
-      return currentNotebookRef.value.pages[activePageIndexRef.value]
-    }),
+    activePage: activePage,
     async loadNotebook(notebookId: string) {
       let notebook = await getNotebookFromIndexDb(notebookId)
       currentNotebookRef.value = notebook
@@ -89,6 +91,12 @@ export function useNotebook() {
         showVerseSelectionModalRef.value = true
       }
       return selectVersesPromise
+    },
+
+    orderPageNotesByIndex() {
+      activePage.value.verseNotes.forEach((note, index) => {
+        note.order = index
+      })
     },
   }
 }
