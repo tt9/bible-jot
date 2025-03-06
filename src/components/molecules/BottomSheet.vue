@@ -161,18 +161,6 @@ const clickOnOverlayHandler = () => {
   }
 }
 
-/**
- * Convert pixels to vh
- * @param pixel
- */
-const pixelToVh = (pixel: number) => {
-  const height =
-    props.maxHeight && props.maxHeight <= sheetHeight.value
-      ? props.maxHeight
-      : sheetHeight.value
-  return (pixel / height) * 100
-}
-
 watch(model, (value, oldValue) => {
   if (value && !oldValue) {
     open()
