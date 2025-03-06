@@ -4,7 +4,7 @@ import NotesText from './NotesText.vue'
 import type { VerseNote } from '../Notebook'
 import NoTextSelection from '../../components/atoms/NoTextSelection.vue'
 import NoteEditor from './edit/NoteEditor.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useNotebook } from '../useNotebook'
 
 const defaultVersion = 'kjv'
