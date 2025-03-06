@@ -14,6 +14,7 @@ const currentNotebookRef = ref<Notebook | null>(null)
  * so this will always be notebook page index 0 for now
  */
 const activePageIndexRef = ref<number>(0)
+const selectedNoteIdRef = ref<string | null>(null)
 
 let showVerseSelectionModalRef: Ref<boolean>
 
@@ -49,6 +50,7 @@ export function useNotebook() {
     }),
     activePageIndex: activePageIndexRef,
     activePage: activePage,
+    selectedNoteId: selectedNoteIdRef,
     async loadNotebook(notebookId: string) {
       let notebook = await getNotebookFromIndexDb(notebookId)
       currentNotebookRef.value = notebook
@@ -97,6 +99,11 @@ export function useNotebook() {
       activePage.value.verseNotes.forEach((note, index) => {
         note.order = index
       })
+    },
+
+    setSelectedNote(noteId: string | null) {
+      selectedNoteIdRef.value = noteId
+      // activePage.value.verseNotes = [...activePage.value.verseNotes]
     },
   }
 }

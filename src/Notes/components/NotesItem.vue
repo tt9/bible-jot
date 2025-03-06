@@ -4,7 +4,7 @@ import NotesText from './NotesText.vue'
 import type { VerseNote } from '../Notebook'
 import NoTextSelection from '../../components/atoms/NoTextSelection.vue'
 import NoteEditor from './edit/NoteEditor.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useNotebook } from '../useNotebook'
 
 const defaultVersion = 'kjv'
@@ -12,12 +12,8 @@ interface NoteBookNodeProps {
   note: VerseNote
 }
 const props = withDefaults(defineProps<NoteBookNodeProps>(), {})
-const { activePage, activeNotebook } = useNotebook()
-const editorOpen = ref<boolean>(false)
-
-const toggleEditorOpen = () => {
-  editorOpen.value = !editorOpen.value
-}
+const { activePage, activeNotebook, selectedNoteId, setSelectedNote } =
+  useNotebook()
 
 const handleDeleteVerseNote = () => {
   const id = props.note.id
@@ -25,15 +21,30 @@ const handleDeleteVerseNote = () => {
     ...activePage.value.verseNotes.filter((n) => n.id !== id),
   ]
 }
+
+const isSelectedNote = computed(() => {
+  return selectedNoteId.value === props.note.id
+})
+
+const setThisAsSelectedNote = () => {
+  if (isSelectedNote.value) {
+    setSelectedNote(null)
+  } else {
+    setSelectedNote(props.note.id)
+  }
+}
 </script>
 
 <template>
   <div
     class="notes-item"
-    :class="{ 'editor-open': editorOpen }"
+    :class="{ 'editor-open': isSelectedNote }"
     :style="{ backgroundColor: props.note.color || '#FFFFFF' }"
   >
-    <NoTextSelection @click="toggleEditorOpen()">
+    <NoTextSelection
+      :allowSelection="isSelectedNote"
+      @click="setThisAsSelectedNote()"
+    >
       <AsyncVerseText
         :showVersion="activeNotebook.meta?.displayBibleVersion"
         :version="
@@ -44,13 +55,13 @@ const handleDeleteVerseNote = () => {
       </AsyncVerseText>
     </NoTextSelection>
     <NotesText
-      v-if="note?.notes && !editorOpen"
-      @click="toggleEditorOpen()"
+      v-if="note?.notes && !isSelectedNote"
+      @click="setThisAsSelectedNote()"
       :content="props.note.notes || ''"
     >
     </NotesText>
     <NoteEditor
-      v-if="editorOpen"
+      v-if="isSelectedNote"
       v-model="props.note.notes"
       :note="props.note"
       @delete="handleDeleteVerseNote"
