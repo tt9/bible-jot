@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import InfoBubble from '../../components/atoms/InfoBubble.vue'
+import { PopoverMenuAnchorPoint } from '../../components/molecules/Popover'
 import { useNotebook } from '../useNotebook'
 
 const { activePage } = useNotebook()
@@ -9,7 +10,7 @@ const { activePage } = useNotebook()
   <div class="page-notes px-4 pb-4">
     <p class="page-notes__title">
       Notes:
-      <InfoBubble
+      <InfoBubble :anchor-point="PopoverMenuAnchorPoint.TOP_LEFT"
         >This is an area where you can take general notes for your study. A
         great area to capture applications, takeaways and main
         points.</InfoBubble

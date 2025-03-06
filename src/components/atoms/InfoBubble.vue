@@ -4,6 +4,12 @@ import Popover from '../molecules/Popover.vue'
 import AppIcon from './AppIcon.vue'
 import { PopoverMenuAnchorPoint } from '../molecules/Popover'
 
+interface InfoBubbleProps {
+  anchorPoint?: PopoverMenuAnchorPoint
+}
+const props = withDefaults(defineProps<InfoBubbleProps>(), {
+  anchorPoint: PopoverMenuAnchorPoint.TOP_RIGHT,
+})
 const infoBubbleHostRef = ref<HTMLElement | null>(null)
 const show = ref<boolean>(false)
 </script>
@@ -13,7 +19,7 @@ const show = ref<boolean>(false)
     <Popover
       v-if="infoBubbleHostRef"
       :hostElement="infoBubbleHostRef"
-      :anchorPoint="PopoverMenuAnchorPoint.TOP_RIGHT"
+      :anchorPoint="props.anchorPoint"
       v-model="show"
     >
       <div class="info-bubble__content p-2">

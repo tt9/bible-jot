@@ -42,7 +42,6 @@ const handleDeleteItemClicked = (close: Function) => {
 
 const addVerseNotesAdjacentToNote = async (before: boolean) => {
   const verses = await selectVersesWithPicker()
-  debugger
   if (verses.length > 0) {
     const index = activePage.value.verseNotes.findIndex((verseNote) => {
       return verseNote.id === props.note.id

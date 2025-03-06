@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import Hammer from 'hammerjs'
 
 /**
  * Bottom sheet props interface
@@ -10,29 +9,18 @@ interface BottomSheetProps {
   overlayColor?: string
   maxWidth?: number
   maxHeight?: number
-  minHeight?: number
   transitionDuration?: number
   overlayClickClose?: boolean
-  canSwipe?: boolean
 }
 
 interface BottomSheetEmits {
   (e: 'opened'): void
   (e: 'closed'): void
-  (e: 'dragging-up'): void
-  (e: 'dragging-down'): void
-}
-
-interface IEvent {
-  type: string
-  deltaY: number
-  isFinal: boolean
-  cancelable: boolean
 }
 
 const props = withDefaults(defineProps<BottomSheetProps>(), {
   overlay: true,
-  overlayColor: '#0000004D',
+  overlayColor: 'rgba(0, 0, 0, 0.16)',
   maxWidth: 640,
   transitionDuration: 300,
   overlayClickClose: true,
@@ -55,16 +43,6 @@ const sheetHeight = ref<number>(0)
 const translateValue = ref<number>(100)
 
 /**
- * Flag to check if sheet is being dragged
- */
-const isDragging = ref<boolean>(false)
-
-/**
- * Content scrolled value
- */
-const contentScroll = ref<number>(0)
-
-/**
  * Refs to all sheet HTML elements
  */
 const bottomSheet = ref<HTMLElement | null>(null)
@@ -72,7 +50,6 @@ const bottomSheetHeader = ref<HTMLElement | null>(null)
 const bottomSheetMain = ref<HTMLElement | null>(null)
 const bottomSheetFooter = ref<HTMLElement | null>(null)
 const bottomSheetContent = ref<HTMLElement | null>(null)
-const bottomSheetDraggableArea = ref<HTMLElement | null>(null)
 
 /**
  * Close bottom sheet when escape key is pressed
@@ -93,14 +70,7 @@ window.addEventListener('keyup', (event: KeyboardEvent) => {
  * Return all classes for bottom sheet content
  */
 const sheetContentClasses = computed(() => {
-  return [
-    'bottom-sheet__content',
-    {
-      'bottom-sheet__content--fullscreen':
-        sheetHeight.value >= window.innerHeight,
-      'bottom-sheet__content--dragging': isDragging.value,
-    },
-  ]
+  return ['bottom-sheet__content']
 })
 
 /**
@@ -151,92 +121,11 @@ const initHeight = async () => {
     bottomSheetFooter.value!.offsetHeight
 }
 
-/**
- * Move sheet while dragging
- * @param event
- * @param type
- */
-const dragHandler = (event: IEvent, type: 'area' | 'main') => {
-  if (props.canSwipe) {
-    isDragging.value = true
-
-    const preventDefault = (e: Event) => {
-      e.preventDefault()
-    }
-
-    if (event.deltaY > 0) {
-      if (type === 'main' && event.type === 'panup') {
-        translateValue.value = pixelToVh(event.deltaY)
-        if (event.cancelable) {
-          bottomSheetMain.value!.addEventListener('touchmove', preventDefault)
-        }
-      }
-
-      if (
-        type === 'main' &&
-        event.type === 'pandown' &&
-        contentScroll.value === 0
-      ) {
-        translateValue.value = pixelToVh(event.deltaY)
-      }
-
-      if (type === 'area') {
-        translateValue.value = pixelToVh(event.deltaY)
-      }
-
-      if (event.type === 'panup') {
-        emit('dragging-up')
-      }
-      if (event.type === 'pandown') {
-        emit('dragging-down')
-      }
-    }
-
-    if (event.isFinal) {
-      bottomSheetMain.value!.removeEventListener('touchmove', preventDefault)
-
-      if (type === 'main') {
-        contentScroll.value = bottomSheetMain.value!.scrollTop
-      }
-      isDragging.value = false
-      if (translateValue.value >= 10) {
-        model.value = false
-      } else {
-        translateValue.value = 0
-      }
-    }
-  }
-}
-
 nextTick(() => {
   /**
    * Set initial card height
    */
   initHeight()
-
-  /**
-   * Create instances of Hammerjs
-   */
-  const hammerAreaInstance = new Hammer(bottomSheetDraggableArea.value!, {
-    inputClass: Hammer.TouchMouseInput,
-    recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_VERTICAL }]],
-  })
-
-  const hammerMainInstance = new Hammer(bottomSheetMain.value!, {
-    inputClass: Hammer.TouchMouseInput,
-    recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_VERTICAL }]],
-  })
-
-  /**
-   * Set events and handlers to hammerjs instances
-   */
-  hammerAreaInstance.on('panstart panup pandown panend', (e: any) => {
-    dragHandler(e, 'area')
-  })
-
-  hammerMainInstance.on('panstart panup pandown panend', (e: any) => {
-    dragHandler(e, 'main')
-  })
 })
 
 /**
@@ -314,13 +203,6 @@ defineExpose({ open, close })
       </transition>
       <div ref="bottomSheetContent" :class="sheetContentClasses">
         <header ref="bottomSheetHeader" class="bottom-sheet__header">
-          <div
-            class="bottom-sheet__draggable-area"
-            ref="bottomSheetDraggableArea"
-            v-if="props.canSwipe"
-          >
-            <div class="bottom-sheet__draggable-thumb"></div>
-          </div>
           <slot name="header"></slot>
         </header>
         <main ref="bottomSheetMain" class="bottom-sheet__main">
@@ -395,21 +277,6 @@ defineExpose({ open, close })
     }
   }
 
-  &__draggable-area {
-    width: 100%;
-    margin: auto;
-    padding: 16px;
-    cursor: grab;
-  }
-
-  &__draggable-thumb {
-    width: 40px;
-    height: 4px;
-    background: #333333;
-    border-radius: 8px;
-    margin: 0 auto;
-  }
-
   &__main {
     display: flex;
     flex-direction: column;
@@ -418,20 +285,20 @@ defineExpose({ open, close })
     -webkit-overflow-scrolling: touch;
     touch-action: auto !important;
 
-    &::-webkit-scrollbar {
-      height: 8px;
-      width: 8px;
-    }
-    &::-webkit-scrollbar-corner {
-      display: none;
-    }
-    &:hover::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0);
-    }
+    // &::-webkit-scrollbar {
+    //   height: 8px;
+    //   width: 8px;
+    // }
+    // &::-webkit-scrollbar-corner {
+    //   display: none;
+    // }
+    // &:hover::-webkit-scrollbar-thumb {
+    //   background-color: rgba(0, 0, 0, 0.2);
+    //   border-radius: 8px;
+    // }
+    // &::-webkit-scrollbar-thumb {
+    //   background-color: rgba(0, 0, 0, 0);
+    // }
   }
 
   &__footer:empty {
