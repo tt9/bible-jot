@@ -222,3 +222,11 @@ $spacing-increments: 20; // Adjust the number of classes you need (for example, 
     margin-bottom: $spacing-unit * $i;
   }
 }
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Allows flexibility */
+  min-width: 0;
+}

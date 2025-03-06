@@ -73,10 +73,16 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .notebook-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 0.5rem;
   padding: 0.5rem;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
 
+  & > * {
+    max-width: 100%;
+  }
   &__add-item {
     border: 3px dashed var(--color-gray);
     border-radius: 0.25rem;
