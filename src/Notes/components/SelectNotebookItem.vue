@@ -24,7 +24,10 @@ const handleDeleteItemClick = () => {
 <template>
   <div class="select-notebook--item">
     <div class="select-notebook--item--header">
-      <RouterLink :to="'/notes/' + notebook.id" :key="notebook.id">
+      <RouterLink
+        :to="{ name: 'edit-note', params: { id: notebook.id } }"
+        :key="notebook.id"
+      >
         <span class="select-notebook--item--title">{{
           props.notebook.name
         }}</span>
@@ -44,6 +47,7 @@ const handleDeleteItemClick = () => {
 </template>
 
 <style lang="scss" scoped>
+/** TODO: refactor to use BEM class names */
 .select-notebook {
   &--item {
     box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);

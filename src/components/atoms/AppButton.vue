@@ -124,5 +124,26 @@ const className = computed(() => {
     border: 2px solid var(--color-gray);
     color: var(--color-gray);
   }
+
+  &.app-button--transparent {
+    background-color: transparent;
+    color: var(--color-gray);
+  }
+}
+
+.app-button--gray-dark {
+  background-color: var(--color-gray-dark);
+  color: var(--color-gray-dark-contrast);
+
+  &.app-button--outline {
+    background-color: transparent;
+    border: 2px solid var(--color-gray-dark);
+    color: var(--color-gray-dark);
+  }
+
+  &.app-button--transparent {
+    background-color: transparent;
+    color: var(--color-gray-dark);
+  }
 }
 </style>
