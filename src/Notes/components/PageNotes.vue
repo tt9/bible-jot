@@ -7,7 +7,7 @@ const { activePage } = useNotebook()
 </script>
 
 <template>
-  <div class="page-notes px-4 pb-4">
+  <div class="page-notes p-4">
     <p class="page-notes__title">
       Notes:
       <InfoBubble :anchor-point="PopoverMenuAnchorPoint.TOP_LEFT"

@@ -21,6 +21,8 @@
   --color-primary-light: #efeeff;
   --color-primary-light-contrast: #202020;
 
+  --color-app-surface: #fafafa;
+
   --color-gray: #acacac;
   --color-gray-contrast: #202020;
 
@@ -37,12 +39,32 @@
   box-sizing: border-box;
 }
 
-body {
+body,
+html {
   margin: 0;
+  height: 100%;
 }
 
+#app {
+  height: 100%;
+  min-height: 100%;
+}
+.app-surface {
+  background: var(--color-app-surface);
+  height: 100%;
+}
 .bible-text {
   font-family: 'Crimson Text', serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
 }
 
 h1 {
@@ -221,4 +243,12 @@ $spacing-increments: 20; // Adjust the number of classes you need (for example, 
     margin-top: $spacing-unit * $i;
     margin-bottom: $spacing-unit * $i;
   }
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Allows flexibility */
+  min-width: 0;
 }

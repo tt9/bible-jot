@@ -7,7 +7,7 @@ import {
   deleteNotebookFromIndexDb,
 } from './NotebookService'
 import type { Notebook } from './Notebook'
-import MenuLayout from '../components/templates/MenuLayout.vue'
+import DefaultLayout from '../components/templates/DefaultLayout.vue'
 import AppIcon from '../components/atoms/AppIcon.vue'
 import Modal from '../components/molecules/Modal.vue'
 import CreateNotebook from './components/create-notebook/CreateNotebook.vue'
@@ -28,7 +28,7 @@ const handleCreateNotebook = async (formData: any) => {
     version: formData.version,
   })
 
-  router.push(`/notes/${notebookId}`)
+  router.push({ name: 'edit-note', params: { id: notebookId.toString() } })
 }
 
 const handleDeleteNotebook = async (id: string) => {
@@ -45,9 +45,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <MenuLayout>
-    <div class="container">
-      <h4 class="p-2 mt-0 mb-2">My Notebooks</h4>
+  <DefaultLayout>
+    <div class="container p-2">
+      <h4 class="p-2 mt-0 mb-2 pt-8">My Notebooks</h4>
       <div v-if="loading">Loading...</div>
       <div v-else>
         <div class="notebook-grid">
@@ -62,7 +62,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-  </MenuLayout>
+  </DefaultLayout>
   <Modal v-model="createNotebookModalOpen">
     <div class="modal-content-wrap">
       <CreateNotebook @create:notebook="handleCreateNotebook"></CreateNotebook>
@@ -73,10 +73,16 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .notebook-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 0.5rem;
   padding: 0.5rem;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
 
+  & > * {
+    max-width: 100%;
+  }
   &__add-item {
     border: 3px dashed var(--color-gray);
     border-radius: 0.25rem;
