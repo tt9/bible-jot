@@ -4,15 +4,10 @@ import type { VerseNote } from '../Notebook'
 import NotesItem from './NotesItem.vue'
 import { useNotebook } from '../useNotebook'
 
-const { activePage } = useNotebook()
+const { activePage, orderPageNotesByIndex } = useNotebook()
 
 const sortNotesByOrder = () => {
   activePage.value.verseNotes.sort((a, b) => a.order - b.order)
-}
-const normalizeOrder = () => {
-  activePage.value.verseNotes.forEach((note, index) => {
-    note.order = index
-  })
 }
 
 const swapNote = (fromIndex: number, toIndex: number) => {
@@ -27,7 +22,7 @@ const handleOrderItemUp = (item: VerseNote, _: VerseNote[]) => {
     return
   }
   swapNote(index, index - 1)
-  normalizeOrder()
+  orderPageNotesByIndex()
 }
 
 const handleOrderItemDown = (item: VerseNote, _: VerseNote[]) => {
@@ -37,7 +32,7 @@ const handleOrderItemDown = (item: VerseNote, _: VerseNote[]) => {
     return
   }
   swapNote(index, index + 1)
-  normalizeOrder()
+  orderPageNotesByIndex()
 }
 </script>
 <template>

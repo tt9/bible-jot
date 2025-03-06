@@ -77,7 +77,7 @@ const handleDeleteVerseNote = () => {
       left: 0;
       right: 0;
       bottom: 0;
-      border: 4px solid var(--color-primary);
+      border: 4px dashed var(--color-primary);
     }
   }
 }

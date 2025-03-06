@@ -1,6 +1,7 @@
 import { KjvBibleVersionReader } from './readers/indexdb/KjvBibleVersionReader'
 import { MkjvBibleVersionReader } from './readers/indexdb/MkjvBibleVersionReader'
 import { LitvBibleVersionReader } from './readers/indexdb/LitvBibleVersionReader'
+import { LebBibleVersionReader } from './readers/indexdb/LebBibleVersionReader'
 
 export const BibleVersionRegistry = [
   {
@@ -13,6 +14,12 @@ export const BibleVersionRegistry = [
     version: 'mkjv',
     name: 'Modern King James Version',
     reader: MkjvBibleVersionReader,
+    local: true,
+  },
+  {
+    version: 'leb',
+    name: 'Lexham English Bible',
+    reader: LebBibleVersionReader,
     local: true,
   },
   {

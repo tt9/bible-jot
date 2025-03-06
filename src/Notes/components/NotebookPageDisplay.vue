@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import IconButton from '../../components/atoms/IconButton.vue'
 import NotesList from './NotesList.vue'
-import PageNotesSidebar from './PageNotesSidebar.vue'
+import PageNotes from './PageNotes.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'vue-router'
 import { useNotebook } from '../useNotebook'
 import { ref } from 'vue'
+import BottomSheet from '../../components/molecules/BottomSheet.vue'
 
 const router = useRouter()
 const { selectVersesWithPicker, activeNotebook, activePage } = useNotebook()
@@ -66,7 +67,10 @@ const handleSelectVersesClicked = async () => {
     </p>
 
     <NotesList></NotesList>
-    <PageNotesSidebar v-model="sidebarOpen"></PageNotesSidebar>
+
+    <BottomSheet v-model="sidebarOpen">
+      <PageNotes></PageNotes>
+    </BottomSheet>
   </div>
 </template>
 

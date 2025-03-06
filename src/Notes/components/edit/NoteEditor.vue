@@ -3,6 +3,7 @@ import PopoverMenu from '../../../components/molecules/PopoverMenu.vue'
 import PopoverMenuItem from '../../../components/molecules/PopoverMenuItem.vue'
 import type { VerseNote } from '../../Notebook'
 import { useNotebook } from '../../useNotebook'
+import { v4 as uuidv4 } from 'uuid'
 
 interface NoteEditorProps {
   note: VerseNote
@@ -11,6 +12,7 @@ interface NoteEditorEmits {
   (e: 'delete', id: string): void
 }
 
+const { activePage, activeNotebook, orderPageNotesByIndex } = useNotebook()
 const props = defineProps<NoteEditorProps>()
 const emit = defineEmits<NoteEditorEmits>()
 const { selectVersesWithPicker } = useNotebook()
@@ -38,14 +40,35 @@ const handleDeleteItemClicked = (close: Function) => {
   close()
 }
 
-const handleAddVersesBeforeClicked = async (close: Function) => {
+const addVerseNotesAdjacentToNote = async (before: boolean) => {
+  const verses = await selectVersesWithPicker()
+  if (verses.length > 0) {
+    const index = activePage.value.verseNotes.findIndex((verseNote) => {
+      return verseNote.id === props.note.id
+    })
+    const verseItems = verses.map((verseAddress, index) => ({
+      id: uuidv4(),
+      order: index,
+      verseAddress: verseAddress,
+      notebookId: activeNotebook.value.id,
+      color: props.note.color,
+    }))
+    activePage.value.verseNotes.splice(
+      before ? index : index + 1,
+      0,
+      ...verseItems,
+    )
+    orderPageNotesByIndex()
+  }
+}
+const handleAddVersesBeforeClicked = (close: Function) => {
   close()
-  await selectVersesWithPicker()
+  addVerseNotesAdjacentToNote(true)
 }
 
 const handleAddVersesAfterClicked = async (close: Function) => {
   close()
-  await selectVersesWithPicker()
+  addVerseNotesAdjacentToNote(false)
 }
 </script>
 <template>

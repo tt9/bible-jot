@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NotesToolPanel from './NotesToolPanel.vue'
+import NotesSideToolbar from './NotesSideToolbar.vue'
 import NotesToolbar from './NotesToolbar.vue'
 import { ref } from 'vue'
 import { useNotebook } from '../useNotebook'
@@ -14,5 +14,5 @@ const panelOpen = ref<boolean>(false)
     @menu:click="panelOpen = true"
   ></NotesToolbar>
   <slot name="default"></slot>
-  <NotesToolPanel v-model="panelOpen"></NotesToolPanel>
+  <NotesSideToolbar v-model="panelOpen"></NotesSideToolbar>
 </template>
