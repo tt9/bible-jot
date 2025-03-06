@@ -15,7 +15,7 @@ const emit = defineEmits<NotesLayoutEmits>()
 
 <template>
   <div class="notes-toolbar">
-    <div class="notes-toolbar__container">
+    <div class="notes-toolbar__container container">
       <p class="notes-toolbar__title" :title="props.title">{{ props.title }}</p>
       <IconButton
         name="menu"
