@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useIconCache } from './useIconCache'
 
 type IconProps = {
   name: string
@@ -14,14 +15,14 @@ const props = withDefaults(defineProps<IconProps>(), {
   height: 24,
 })
 
-const svgCache = new Map<string, string>() // Cache to store fetched SVGs
+const iconCache = useIconCache()
 const svgContent = ref<string | null>(null)
 
 const fetchSvg = async () => {
   if (!props.name) return
 
-  if (svgCache.has(props.name)) {
-    svgContent.value = svgCache.get(props.name)! // Load from cache
+  if (iconCache.hasIconData(props.name)) {
+    svgContent.value = iconCache.getCachedIconData(props.name)! // Load from cache
     return
   }
 
@@ -31,7 +32,7 @@ const fetchSvg = async () => {
     })
     if (!response.ok) throw new Error('Failed to load icon')
     const svgText = await response.text()
-    svgCache.set(props.name, svgText) // Store in cache
+    iconCache.setIconData(props.name, svgText) // Store in cache
     svgContent.value = svgText
   } catch (error) {
     console.error('Error fetching SVG:', error)
