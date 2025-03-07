@@ -9,6 +9,7 @@ interface ModalProps {
   closeOnBackdropClick?: boolean
   closeOnPopstate?: boolean
   width?: string
+  zIndex?: number
 }
 interface ModalEmits {
   (e: 'modal:close'): void
@@ -18,6 +19,7 @@ interface ModalEmits {
 const props = withDefaults(defineProps<ModalProps>(), {
   closeOnBackdropClick: true,
   closeOnPopstate: true,
+  zIndex: 2,
 })
 const emit = defineEmits<ModalEmits>()
 const open = defineModel()
@@ -164,7 +166,7 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: v-bind('props.zIndex');
   }
 
   .modal-popup {
@@ -173,7 +175,7 @@ onMounted(() => {
     top: 30px;
     left: 50%;
     transform: translate(-50%, 0);
-    z-index: 2;
+    z-index: v-bind('props.zIndex + 1');
     background: white;
     border-radius: 4px;
     box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);
