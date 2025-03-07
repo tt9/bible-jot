@@ -3,7 +3,7 @@ import DefaultLayout from '../components/templates/DefaultLayout.vue'
 </script>
 <template>
   <DefaultLayout>
-    <div class="container p-2">
+    <div class="container p-2 app-surface">
       <div class="dashboard-grid p-2 pt-8">
         <div class="dashboard-grid__item">
           <p class="dashboard-grid__item--title">Recent Notes</p>

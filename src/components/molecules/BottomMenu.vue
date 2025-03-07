@@ -9,7 +9,7 @@ const route = useRoute()
 const items = [
   { name: 'Home', iconName: 'home', routeName: 'dashboard' },
   { name: 'Add Note', iconName: 'edit', routeName: 'notes' },
-  { name: 'Read Bible', iconName: 'book-open', routeName: 'bible' },
+  { name: 'Read Bible', iconName: 'book-open', routeName: 'bible-reader' },
   { name: 'Settings', iconName: 'settings', routeName: 'settings' },
 ]
 

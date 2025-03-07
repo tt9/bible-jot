@@ -6,7 +6,8 @@ const open = defineModel<boolean>()
 </script>
 <template>
   <SideToolbar v-model="open">
-    <SideToolbarItem iconName="check">Test</SideToolbarItem>
+    <SideToolbarItem iconName="save">Export</SideToolbarItem>
+    <SideToolbarItem iconName="edit-3">Rename</SideToolbarItem>
   </SideToolbar>
 </template>
 <style lang="scss" scoped></style>
