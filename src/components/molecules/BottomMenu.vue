@@ -14,7 +14,7 @@ const items = [
 
 const handleMenuItemClicked = (item: (typeof items)[number]) => {
   if (item.routeName) {
-    router.push({ name: item.routeName })
+    router.replace({ name: item.routeName })
   }
 }
 </script>
