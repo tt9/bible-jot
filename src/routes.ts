@@ -8,6 +8,11 @@ const routes = [
   { path: '/', component: DashboardPage, name: 'dashboard' },
   { path: '/notes/:id', component: EditNotesPage, name: 'edit-note' },
   { path: '/notes', component: MyNotesPage, name: 'notes' },
+  {
+    path: '/bible',
+    component: () => import('./BibleReader/BibleReaderPage.vue'),
+    name: 'bible-reader',
+  },
 ]
 
 const router = createRouter({

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import IconButton from '../atoms/IconButton.vue'
-import { onMounted } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -9,19 +8,15 @@ const route = useRoute()
 const items = [
   { name: 'Home', iconName: 'home', routeName: 'dashboard' },
   { name: 'Add Note', iconName: 'edit', routeName: 'notes' },
-  { name: 'Read Bible', iconName: 'book-open', routeName: 'bible' },
+  { name: 'Read Bible', iconName: 'book-open', routeName: 'bible-reader' },
   { name: 'Settings', iconName: 'settings', routeName: 'settings' },
 ]
 
 const handleMenuItemClicked = (item: (typeof items)[number]) => {
   if (item.routeName) {
-    router.push({ name: item.routeName })
+    router.replace({ name: item.routeName })
   }
 }
-
-onMounted(() => {
-  console.log('route.name', route.name)
-})
 </script>
 
 <template>
