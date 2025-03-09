@@ -2,6 +2,7 @@
 import PopoverMenu from '../../components/molecules/PopoverMenu.vue'
 import PopoverMenuItem from '../../components/molecules/PopoverMenuItem.vue'
 import type { Notebook } from '../Notebook'
+import { downloadNotebook } from '../NotebookService'
 
 interface SelectNotebookItemProps {
   notebook: Partial<Notebook>
@@ -21,6 +22,12 @@ const handleDeleteItemClick = (closePopover: Function) => {
   closePopover()
   emit('item:delete', props.notebook.id || '')
 }
+
+const handleDownloadItemClick = (closePopover: Function) => {
+  if (!props.notebook.id) return
+  closePopover()
+  downloadNotebook(props.notebook.id)
+}
 </script>
 <template>
   <div class="select-notebook-item">
@@ -36,6 +43,13 @@ const handleDeleteItemClick = (closePopover: Function) => {
       </RouterLink>
       <div class="select-notebook-item__more">
         <PopoverMenu v-slot="{ closePopover }">
+          <PopoverMenuItem
+            @click="handleDownloadItemClick(closePopover)"
+            icon-name="download"
+            class="select-notebook-item__more-item"
+          >
+            Download
+          </PopoverMenuItem>
           <PopoverMenuItem
             @click="handleDeleteItemClick(closePopover)"
             icon-name="trash"
