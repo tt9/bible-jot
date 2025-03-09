@@ -153,3 +153,24 @@ export const deleteNotebookFromIndexDb = async (id: string) => {
 
   await promisifyDbRequest(store.delete(id))
 }
+
+export const downloadNotebook = async (notebookId: string) => {
+  const notebook = await getNotebookFromIndexDb(notebookId)
+  if (!notebook) {
+    return false
+  }
+
+  const filename = `${notebook.name}.jot`
+  const data = btoa(JSON.stringify(notebook))
+  const blob = new Blob([data], { type: 'application/json' })
+
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = filename
+
+  document.body.appendChild(a)
+  a.click()
+
+  document.body.removeChild(a)
+  URL.revokeObjectURL(a.href)
+}
