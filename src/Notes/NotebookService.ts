@@ -71,17 +71,24 @@ export const updateNotebookInIndexDb = async (
     store.put({
       ...partialNotebook,
       id: notebookId,
-      updatedAt: new Date().toUTCString(),
+      updatedAt: new Date(),
     } as Partial<Notebook>),
   )
 
   return result
 }
 
-export const getNotebooksFromIndexDb = async (): Promise<
-  Partial<Notebook>[]
-> => {
+export const getNotebooksFromIndexDb = async (
+  options: {
+    limit?: number
+    offset?: number
+    orderByIndex?: string
+    orderDirection?: 'asc' | 'desc'
+  } = {},
+): Promise<Partial<Notebook>[]> => {
   const db = await getDb()
+
+  const { limit, offset, orderByIndex, orderDirection } = options
 
   return new Promise((resolve, reject) => {
     const store = db
@@ -91,21 +98,40 @@ export const getNotebooksFromIndexDb = async (): Promise<
     const results: {
       id: string
       name: string
-      createdAt: string
-      updatedAt: string
+      createdAt: Date
+      updatedAt: Date
     }[] = []
 
-    store.openCursor().onsuccess = (event) => {
+    let cursor: IDBRequest<IDBCursorWithValue | null>
+
+    if (orderByIndex) {
+      cursor = store
+        .index(orderByIndex)
+        .openCursor(null, orderDirection === 'desc' ? 'prev' : 'next')
+    } else {
+      cursor = store.openCursor()
+    }
+
+    let offsetCounter = offset
+    cursor.onsuccess = (event) => {
       const cursor = (event.target as IDBRequest).result
       if (cursor) {
         const { id, name, createdAt, updatedAt } = cursor.value
-        results.push({
-          id,
-          name,
-          createdAt,
-          updatedAt,
-        })
-        cursor.continue()
+        if (offsetCounter) {
+          offsetCounter--
+        } else {
+          results.push({
+            id,
+            name,
+            createdAt,
+            updatedAt,
+          })
+        }
+        if (results.length !== limit) {
+          cursor.continue()
+        } else {
+          resolve(results)
+        }
       } else {
         resolve(results)
       }

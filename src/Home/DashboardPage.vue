@@ -7,15 +7,16 @@ import WelcomeHeader from './DashboardPage/WelcomeHeader.vue'
   <DefaultLayout>
     <div class="container p-2 app-surface">
       <div class="dashboard-grid p-2 pt-8">
-        <div class="dashboard-grid__item welcome-header">
+        <div class="dashboard-grid__item welcome-header mb-8">
           <WelcomeHeader></WelcomeHeader>
         </div>
 
-        <div class="dashboard-grid__item recent-notes-header">
-          <p class="dashboard-grid__item--title">Recent Notes</p>
-        </div>
         <div class="dashboard-grid__item news-and-updates-header">
-          <p class="dashboard-grid__item--title">News and Updates</p>
+          <h6 class="news-and-updates-header__title mb-4">News and Updates</h6>
+          <p>
+            Thank you for using BibleJot! BibleJot is currently in a beta
+            release. Features and experience are subject to change.
+          </p>
         </div>
       </div>
     </div>
@@ -31,10 +32,6 @@ import WelcomeHeader from './DashboardPage/WelcomeHeader.vue'
   .news-and-updates-header,
   .welcome-header {
     grid-column: span 12;
-
-    &__title {
-      margin-bottom: 0;
-    }
   }
 }
 </style>
