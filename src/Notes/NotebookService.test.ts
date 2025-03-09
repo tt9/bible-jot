@@ -6,6 +6,7 @@ import {
   getNotebooksFromIndexDb,
   updateNotebookInIndexDb,
 } from './NotebookService'
+import { nextTick } from 'vue'
 
 var mockGetDb: Mock
 var mockPromisifyDbRequest: Mock
@@ -119,6 +120,71 @@ describe('NotebookService', () => {
 
       requestAnimationFrame(() => {
         cursorMock.onsuccess({ target: { result: null } })
+      })
+    })
+
+    it('should only return limit number of results', async () => {
+      const { cursorMock } = setupMockDbImplementation([])
+
+      const createdAt = new Date()
+      const updatedAt = new Date()
+      getNotebooksFromIndexDb({ limit: 1 }).then((result) => {
+        expect(result).toEqual([{ id: '1', name: '1', createdAt, updatedAt }])
+      })
+
+      nextTick(() => {
+        cursorMock.onsuccess({
+          target: {
+            result: {
+              value: {
+                id: '1',
+                name: '1',
+                createdAt,
+                updatedAt,
+              },
+            },
+          },
+        })
+      })
+    })
+
+    it('should only return limit number of results with offset', async () => {
+      const { cursorMock } = setupMockDbImplementation([])
+
+      const mockContinue = vi.fn()
+      const createdAt = new Date()
+      const updatedAt = new Date()
+      getNotebooksFromIndexDb({ limit: 1, offset: 1 }).then((result) => {
+        expect(result).toEqual([{ id: '2', name: '2', createdAt, updatedAt }])
+        expect(mockContinue).toHaveBeenCalled()
+      })
+
+      nextTick(() => {
+        cursorMock.onsuccess({
+          target: {
+            result: {
+              continue: mockContinue,
+              value: {
+                id: '1',
+                name: '1',
+                createdAt,
+                updatedAt,
+              },
+            },
+          },
+        }),
+          cursorMock.onsuccess({
+            target: {
+              result: {
+                value: {
+                  id: '2',
+                  name: '2',
+                  createdAt,
+                  updatedAt,
+                },
+              },
+            },
+          })
       })
     })
   })

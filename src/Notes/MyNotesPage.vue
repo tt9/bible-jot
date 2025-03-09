@@ -12,6 +12,7 @@ import AppIcon from '../components/atoms/AppIcon.vue'
 import Modal from '../components/molecules/Modal.vue'
 import CreateNotebook from './components/create-notebook/CreateNotebook.vue'
 import SelectNotebookItem from './components/SelectNotebookItem.vue'
+import { NotebookUpdatedAtIndex } from '../data/AppIndexDb'
 
 const loading = ref<boolean>(true)
 const notebooks = ref<Partial<Notebook>[]>([])
@@ -34,12 +35,18 @@ const handleCreateNotebook = async (formData: any) => {
 const handleDeleteNotebook = async (id: string) => {
   await deleteNotebookFromIndexDb(id)
 
-  const results = await getNotebooksFromIndexDb()
+  const results = await getNotebooksFromIndexDb({
+    orderByIndex: NotebookUpdatedAtIndex,
+    orderDirection: 'desc',
+  })
   notebooks.value = results
 }
 
 onMounted(async () => {
-  const results = await getNotebooksFromIndexDb()
+  const results = await getNotebooksFromIndexDb({
+    orderByIndex: NotebookUpdatedAtIndex,
+    orderDirection: 'desc',
+  })
   notebooks.value = results
   loading.value = false
 })

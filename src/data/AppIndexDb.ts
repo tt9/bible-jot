@@ -10,6 +10,8 @@ export const BibleVersionIndexName = 'bible_version_index'
 
 // Notebook Datastore
 export const NotebookObjectStoreName = 'notebook_data'
+export const NotebookUpdatedAtIndex = 'notebook_updated_at_index'
+export const NotebookCreatedAtIndex = 'notebook_created_at_index'
 
 const createDbV1 = (db: IDBDatabase) => {
   if (!db.objectStoreNames.contains(BibleObjectStoreName)) {
@@ -25,14 +27,47 @@ const createDbV1 = (db: IDBDatabase) => {
     })
   }
   if (!db.objectStoreNames.contains(NotebookObjectStoreName)) {
-    db.createObjectStore(NotebookObjectStoreName, {
+    const notebookStore = db.createObjectStore(NotebookObjectStoreName, {
       keyPath: 'id',
+    })
+
+    notebookStore.createIndex(NotebookUpdatedAtIndex, 'updatedAt', {
+      unique: false,
+    })
+
+    notebookStore.createIndex(NotebookCreatedAtIndex, 'createdAt', {
+      unique: false,
     })
   }
 }
 
-const openDbV1 = (): Promise<IDBDatabase> => {
+const openDb = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
+    /**
+Example for future migrations 
+const request = indexedDB.open("MyDatabase", 2); // Increment version (e.g., from 1 to 2)
+
+request.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  const oldVersion = event.oldVersion;
+  const newVersion = event.newVersion;
+
+  console.log(`Upgrading from version ${oldVersion} to ${newVersion}`);
+
+  if (oldVersion < 1) {
+    // Initial database setup
+    const store = db.createObjectStore("MyStore", { keyPath: "id" });
+    store.createIndex("dateIndex", "date", { unique: false });
+  }
+
+  if (oldVersion < 2) {
+    // Migration for version 2: Add a new index
+    const store = event.target.transaction.objectStore("MyStore");
+    store.createIndex("statusIndex", "status", { unique: false });
+  }
+};
+
+     */
     const dbRequest = indexedDB.open(AppDatabaseName, dbVersion)
 
     dbRequest.onupgradeneeded = (event) => {
@@ -50,15 +85,6 @@ const openDbV1 = (): Promise<IDBDatabase> => {
       reject(event)
     }
   })
-}
-
-const openDb = (): Promise<IDBDatabase> => {
-  switch (dbVersion) {
-    case 1:
-      return openDbV1()
-    default:
-      throw new Error('Unsupported database version')
-  }
 }
 
 export const getDb = async (): Promise<IDBDatabase> => {

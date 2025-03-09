@@ -33,6 +33,6 @@ export interface Notebook {
   globalNotes: GlobalNote[]
   version?: string
   meta?: NotebookMeta
-  createdAt?: string
-  updatedAt?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
